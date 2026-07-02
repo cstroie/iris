@@ -1,4 +1,4 @@
-# IRIS – Ghid Indicații Radioimagistice
+# IRIS – Indicații Radioimagistice Structurate
 
 A progressive web application (PWA) providing clinical decision support for medical imaging recommendations in Romanian.
 
@@ -7,7 +7,7 @@ A progressive web application (PWA) providing clinical decision support for medi
 - **Evidence-based guidance** with graded recommendations (A, B, C levels)
 - **Radiation dose information** with comparative assessments
 - **Offline access** via service worker technology
-- **Searchable synonyms** supporting lay and technical terminology lookups
+- **Searchable synonyms** supporting technical terminology lookups
 - **Mobile-first design** with light/dark theme support
 
 ## Features
@@ -28,7 +28,7 @@ A progressive web application (PWA) providing clinical decision support for medi
 ### Data
 The application contains structured data organized as:
 ```
-chapters (1) ──< subchapters (n) ──< situations (n) ──< recommendations (n)
+chapters (1) ──> subchapters (n) ──> situations (n) ──> recommendations (n)
 ```
 
 See [`data/SCHEMA.md`](data/SCHEMA.md) for complete data structure documentation.
