@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0d10">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IRIS">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>IRIS</title>
+<script src="./support.js"></script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="data/iris-data.js"></script>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  [data-theme]{
+    --bg:#0b0d10; --surface:#15181e; --surface-2:#1b1f26; --border:#242932;
+    --text:#eef1f5; --muted:#8b93a2; --faint:#5f6774;
+    --accent:oklch(0.86 0.2 128); --accent-ink:#0c1206; --accent-dim:#15230f; --accent-border:#243d18;
+    --dose-empty:#2a303a; --shadow:0 22px 55px -34px rgba(0,0,0,.75); --overlay:rgba(6,8,11,.74);
+  }
+  [data-theme="light"]{
+    --bg:#f3f4f0; --surface:#ffffff; --surface-2:#eceee9; --border:#e0e2dc;
+    --text:#14171c; --muted:#545d6e; --faint:#767e8c;
+    --accent:oklch(0.66 0.19 131); --accent-ink:#0c1206; --accent-dim:#eef6da; --accent-border:#cde29e;
+    --dose-empty:#dde1d8; --shadow:0 18px 44px -30px rgba(40,50,20,.26); --overlay:rgba(20,23,28,.42);
+  }
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+  input{font-family:inherit}
+  @keyframes irisspin{to{transform:rotate(360deg)}}
+  @keyframes irisfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes irispop{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
+  @media print{
+    [data-theme]{--bg:#fff;--surface:#fff;--surface-2:#fff;--text:#000;--muted:#333;--faint:#555;--border:#bbb;--shadow:none;--dose-empty:#ddd}
+    [data-noprint]{display:none!important}
+    [data-printonly]{display:block!important}
+    [data-rec]{break-inside:avoid;border:1px solid #999!important;box-shadow:none!important}
+  }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#0b0d10"/><circle cx="50" cy="50" r="20" fill="none" stroke="#b6f000" stroke-width="4"/><circle cx="50" cy="50" r="6" fill="#b6f000"/></svg></template>
+<div data-theme="dark" ref="{{ rootRef }}" style="min-height:100vh;background:var(--bg);color:var(--text)">
+  <div style="max-width:940px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative">
+
+    <!-- ===== HEADER ===== -->
+    <header data-noprint style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:color-mix(in srgb, var(--bg) 82%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)">
+      <div role="button" onClick="{{ goHome }}" style="display:flex;align-items:center;gap:11px;cursor:pointer">
+        <div style="width:32px;height:32px;border-radius:50%;border:2.5px solid var(--accent);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span></div>
+        <div style="display:flex;flex-direction:column;line-height:1"><span style="font:700 19px 'Space Grotesk',sans-serif;letter-spacing:.13em">IRIS</span><span style="font:500 8.5px 'IBM Plex Mono',monospace;color:var(--faint);letter-spacing:.1em;margin-top:3px">INDICAȚII RADIOIMAGISTICE STRUCTURATE</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button onClick="{{ openLegend }}" title="Legendă" style="width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:15px;cursor:pointer">ⓘ</button>
+        <button onClick="{{ toggleTheme }}" title="Temă" style="width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:15px;cursor:pointer">{{ themeIcon }}</button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:0 20px 48px">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="">
+        <div style="padding:34px 4px 22px">
+          <h1 style="font:700 34px/1.12 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;max-width:15ch">{{ heroTitle }}</h1>
+          <p style="font-size:15px;line-height:1.6;color:var(--muted);margin:0;max-width:520px">Ghid de indicații radioimagistice — {{ countSituations }} situații clinice, {{ countRecs }} recomandări. Caută un simptom sau răsfoiește pe capitole.</p>
+        </div>
+        <div role="button" onClick="{{ goSearch }}" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 17px;cursor:text;box-shadow:var(--shadow)">
+          <span style="color:var(--accent);font-size:18px">⌕</span>
+          <span style="font-size:15px;color:var(--faint)">Caută simptom, examen sau fragment de cuvânt…</span>
+          <span style="margin-left:auto;font:600 10px 'IBM Plex Mono',monospace;background:var(--surface-2);border:1px solid var(--border);color:var(--faint);padding:4px 7px;border-radius:6px">/</span>
+        </div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin:20px 4px 10px">EXEMPLE</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="5">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ hasRecent }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:32px 4px 12px">
+            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">VIZUALIZATE RECENT</span>
+            <button onClick="{{ clearRecent }}" style="border:0;background:transparent;color:var(--faint);font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.08em;cursor:pointer" style-hover="color:var(--text)">ȘTERGE</button>
+          </div>
+          <div style="display:flex;gap:10px;overflow-x:auto;margin:0 -20px;padding:2px 20px 8px">
+            <sc-for list="{{ recentVM }}" as="q" hint-placeholder-count="3">
+              <div role="button" onClick="{{ q.onOpen }}" style="flex:0 0 232px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;cursor:pointer;display:flex;flex-direction:column" style-hover="border-color:var(--accent-border)">
+                <div style="font:500 9.5px 'IBM Plex Mono',monospace;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.crumb }}</div>
+                <div style="font:600 14px/1.32 'Space Grotesk',sans-serif;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px">{{ q.name }}</div>
+                <div style="margin-top:10px"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:34px 4px 14px">
+          <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">RĂSFOIEȘTE · {{ countChapters }} CAPITOLE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px">
+          <sc-for list="{{ chaptersVM }}" as="ch" hint-placeholder-count="8">
+            <div role="button" onClick="{{ ch.onOpen }}" style="background:{{ ch.cardBg }};border:1px solid {{ ch.cardBorder }};border-radius:16px;padding:15px 15px 14px;cursor:pointer;display:flex;flex-direction:column;min-height:104px;transition:transform .12s" style-hover="transform:translateY(-2px)">
+              <span style="font:700 16px/1.15 'Space Grotesk',sans-serif;color:{{ ch.nameColor }}">{{ ch.name }}</span>
+              <div style="display:flex;gap:4px;margin-top:10px">
+                <sc-for list="{{ ch.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for>
+              </div>
+              <span style="font:500 10.5px 'IBM Plex Mono',monospace;color:{{ ch.metaColor }};margin-top:auto;padding-top:10px">{{ ch.meta }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <footer style="margin:40px 4px 0;padding-top:20px;border-top:1px solid var(--border)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 12px">
+            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">SURSĂ & INFORMAȚII</span>
+          </div>
+          <p style="font-size:12.5px;line-height:1.6;color:var(--faint);margin:0 0 12px;max-width:560px">Conținut adaptat după <span style="color:var(--muted)">Ghidul de utilizare a investigațiilor radiologice și imagistice medicale</span> — Ministerul Sănătății. Instrument de suport decizional; nu înlocuiește judecata clinică.</p>
+          <div style="display:flex;justify-content:center;margin-top:2px"><button onClick="{{ openAbout }}" style="border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 12.5px 'Space Grotesk',sans-serif;cursor:pointer" style-hover="border-color:var(--accent-border);color:var(--text)">Despre IRIS și sursa oficială</button></div>
+        </footer>
+      </div>
+      </sc-if>
+      <sc-if value="{{ isSearch }}">
+      <div style=";padding-top:20px">
+        <div style="display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)">
+          <span style="color:var(--accent);font-size:18px">⌕</span>
+          <input ref="{{ inputRef }}" value="{{ query }}" onInput="{{ onInput }}" placeholder="Caută simptom, examen sau fragment de cuvânt…" style="flex:1;border:0;outline:0;background:transparent;color:var(--text);font-size:16px" />
+          <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" style="border:0;background:transparent;color:var(--faint);font-size:18px;cursor:pointer">✕</button></sc-if>
+        </div>
+
+        <sc-if value="{{ aiAvailable }}">
+        <div style="display:flex;align-items:center;gap:10px;margin-top:11px">
+          <button onClick="{{ onAI }}" style="{{ aiBtnStyle }}"><span style="{{ aiSpinStyle }}"></span>✨ Interpretează cu AI</button>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ aiHint }}</span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ aiNote }}">
+          <div style="margin-top:11px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:12px;padding:11px 13px;font-size:13px;color:var(--text)">✨ {{ aiNote }}</div>
+        </sc-if>
+
+        <!-- empty state -->
+        <sc-if value="{{ showSearchIntro }}">
+          <div style="margin-top:26px">
+            <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin-bottom:12px">ÎNCEARCĂ</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+            </div>
+            <p style="margin-top:22px;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:520px">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: Iris găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
+          </div>
+        </sc-if>
+
+        <!-- results -->
+        <sc-if value="{{ hasResults }}">
+          <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:22px 2px 12px">{{ resultLabel }}</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ resultsVM }}" as="r" hint-placeholder-count="5">
+              <div role="button" onClick="{{ r.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
+                <div style="font:500 10px 'IBM Plex Mono',monospace;color:var(--faint);letter-spacing:.04em;margin-bottom:6px">{{ r.crumb }}</div>
+                <div style="font:600 16px/1.25 'Space Grotesk',sans-serif;color:var(--text)">{{ r.name }}</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap">
+                  <span style="{{ r.bestStyle }}">{{ r.bestIcon }} {{ r.bestExam }}</span>
+                  <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ r.recMeta }}</span>
+                  <span style="margin-left:auto;display:flex;gap:4px"><sc-for list="{{ r.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noResults }}">
+          <div style="margin-top:40px;text-align:center;color:var(--muted)">
+            <div style="font-size:30px;margin-bottom:10px;opacity:.5">⌕</div>
+            <div style="font:600 16px 'Space Grotesk',sans-serif;color:var(--text)">Niciun rezultat pentru „{{ query }}"</div>
+            <p style="font-size:13.5px;margin-top:8px">Încearcă alți termeni<sc-if value="{{ aiAvailable }}">, sau apasă „Interpretează cu AI"</sc-if>.</p>
+          </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ============ CHAPTER ============ -->
+      <sc-if value="{{ isChapter }}">
+      <div style="">
+        <div data-noprint style="display:flex;align-items:center;gap:9px;padding:20px 2px 4px"><button onClick="{{ goHome }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:var(--faint);line-height:1">CAPITOL</span></div>
+        <h2 style="font:700 28px/1.1 'Space Grotesk',sans-serif;margin:8px 2px 4px;letter-spacing:-.01em">{{ curChapterName }}</h2>
+        <div style="font:500 12px 'IBM Plex Mono',monospace;color:var(--faint);margin:0 2px 20px">{{ curChapterMeta }}</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ subsVM }}" as="s" hint-placeholder-count="6">
+            <div role="button" onClick="{{ s.onOpen }}" style="display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
+              <span style="font:600 12px 'IBM Plex Mono',monospace;color:var(--faint);width:24px">{{ s.num }}</span>
+              <span style="font:500 16px 'Space Grotesk',sans-serif;flex:1">{{ s.name }}</span>
+              <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ s.count }}</span>
+              <span style="color:var(--faint);font-size:16px">›</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SUBCHAPTER ============ -->
+      <sc-if value="{{ isSub }}">
+      <div style="">
+        <div data-noprint style="display:flex;align-items:center;gap:8px;padding:20px 2px 4px"><button onClick="{{ backToChapter }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><div style="display:flex;align-items:center;flex-wrap:wrap;line-height:1.5"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span style="color:var(--faint);opacity:.5;margin:0 5px;font:500 11px 'IBM Plex Mono',monospace">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;color:var(--faint);cursor:pointer" style-hover="color:var(--accent)">{{ cr.label }}</span></sc-for></div></div>
+        <h2 style="font:700 26px/1.12 'Space Grotesk',sans-serif;margin:8px 2px 4px;letter-spacing:-.01em">{{ curSubName }}</h2>
+        <div style="font:500 12px 'IBM Plex Mono',monospace;color:var(--faint);margin:0 2px 20px">{{ curSubMeta }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ sitsVM }}" as="q" hint-placeholder-count="8">
+            <div role="button" onClick="{{ q.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
+              <div style="font:600 15.5px/1.3 'Space Grotesk',sans-serif">{{ q.name }}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span>
+                <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ q.recMeta }}</span>
+                <span style="margin-left:auto;display:flex;gap:4px"><sc-for list="{{ q.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SITUATION DETAIL ============ -->
+      <sc-if value="{{ isSit }}">
+      <div style="">
+        <div data-printonly style="display:none;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #000">
+          <div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 22px 'Space Grotesk',sans-serif;letter-spacing:.14em;color:#000">IRIS</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#333">Indicații radioimagistice structurate</span></div>
+          <div style="font:500 11px 'IBM Plex Mono',monospace;color:#444;margin-top:8px">{{ sitPrintCrumb }}</div>
+        </div>
+        <div data-noprint style="display:flex;align-items:center;gap:8px;padding:20px 2px 4px"><button onClick="{{ backToSub }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><div style="display:flex;align-items:center;flex-wrap:wrap;line-height:1.5"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span style="color:var(--faint);opacity:.5;margin:0 5px;font:500 11px 'IBM Plex Mono',monospace">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;color:var(--faint);cursor:pointer" style-hover="color:var(--accent)">{{ cr.label }}</span></sc-for></div></div>
+        <h2 style="font:700 27px/1.14 'Space Grotesk',sans-serif;margin:10px 2px 16px;letter-spacing:-.01em">{{ curSitName }}</h2>
+        <div data-noprint style="display:flex;gap:8px;margin:0 0 22px;flex-wrap:wrap">
+          <button onClick="{{ toggleFav }}" style="{{ favBtnStyle }}">{{ favIcon }} {{ favLabel }}</button>
+          <button onClick="{{ doShare }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⤴ Distribuie</button>
+          <button onClick="{{ doPrint }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⎙ Printează</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:13px">
+          <sc-for list="{{ recsVM }}" as="r" hint-placeholder-count="3">
+            <div data-rec style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:17px 17px 16px;position:relative;overflow:hidden">
+              <div style="position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:3px;background:{{ r.barColor }}"></div>
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="{{ r.chipStyle }}">{{ r.tipShort }}</span><span style="font:600 16px 'Space Grotesk',sans-serif">{{ r.exam }}</span></div>
+                <sc-if value="{{ r.hasGrade }}"><span style="font:700 10px 'IBM Plex Mono',monospace;border:1px solid var(--border);color:var(--muted);padding:5px 8px;border-radius:7px;white-space:nowrap" title="Grad de recomandare">GRAD {{ r.grade }}</span></sc-if>
+              </div>
+              <div style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;{{ r.badgeStyle }}">{{ r.indIcon }} {{ r.indication }}</div>
+              <sc-if value="{{ r.hasGrade }}"><div style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:9px">{{ r.gradeLine }}</div></sc-if>
+              <sc-if value="{{ r.hasComments }}"><p style="font-size:13.5px;line-height:1.6;color:var(--text);opacity:.86;margin:13px 0 0;white-space:pre-line">{{ r.comments }}</p></sc-if>
+              <sc-if value="{{ r.hasOther }}"><div style="margin-top:12px;background:var(--surface-2);border-radius:11px;padding:11px 13px"><div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--faint);margin-bottom:5px">ALTE INFORMAȚII</div><p style="font-size:12.5px;line-height:1.55;color:var(--muted);margin:0;white-space:pre-line">{{ r.otherInfo }}</p></div></sc-if>
+              <sc-if value="{{ r.hasDose }}">
+              <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--border)">
+                <div style="display:flex;gap:3px"><sc-for list="{{ r.doseSegs }}" as="s" hint-placeholder-count="5"><span style="{{ s.style }}"></span></sc-for></div>
+                <span style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.03em;white-space:nowrap;color:{{ r.doseColor }}">{{ r.doseLabel }}</span>
+              </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div data-printonly style="display:none;margin-top:20px;padding-top:10px;border-top:1px solid #000;font:500 10px/1.55 'IBM Plex Mono',monospace;color:#333">IRIS — ghid digital de indicații radioimagistice, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
+      </div>
+      </sc-if>
+
+      <!-- ============ FAVORITES ============ -->
+      <sc-if value="{{ isFavs }}">
+      <div style="">
+        <div style="padding:22px 2px 4px"><span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--faint)">SALVATE</span></div>
+        <h2 style="font:700 26px 'Space Grotesk',sans-serif;margin:8px 2px 20px;letter-spacing:-.01em">Situații salvate</h2>
+        <sc-if value="{{ hasFavs }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ favsVM }}" as="q" hint-placeholder-count="3">
+              <div role="button" onClick="{{ q.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
+                <div style="font:500 10px 'IBM Plex Mono',monospace;color:var(--faint);margin-bottom:6px">{{ q.crumb }}</div>
+                <div style="font:600 15.5px/1.3 'Space Grotesk',sans-serif">{{ q.name }}</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ q.recMeta }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noFavs }}">
+          <div style="margin-top:44px;text-align:center;color:var(--muted)"><div style="font-size:30px;opacity:.4;margin-bottom:10px">★</div><div style="font:600 16px 'Space Grotesk',sans-serif;color:var(--text)">Nicio situație salvată</div><p style="font-size:13.5px;margin-top:8px">Apasă ★ pe o situație clinică pentru a o salva aici.</p></div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+    </main>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav data-noprint style="position:sticky;bottom:0;z-index:30;display:flex;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(14px);border-top:1px solid var(--border)">
+      <button onClick="{{ goHome }}" style="{{ navHomeStyle }}"><span style="font-size:17px">⌂</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">ACASĂ</span></button>
+      <button onClick="{{ goSearch }}" style="{{ navSearchStyle }}"><span style="font-size:17px">⌕</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">CAUTĂ</span></button>
+      <button onClick="{{ goFavs }}" style="{{ navFavStyle }}"><span style="font-size:15px">★</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">SALVATE{{ favBadge }}</span></button>
+    </nav>
+
+    <!-- ===== TOAST ===== -->
+    <sc-if value="{{ toast }}">
+      <div data-noprint style="position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:60;background:var(--accent);color:var(--accent-ink);font:600 13px 'Space Grotesk',sans-serif;padding:11px 18px;border-radius:12px;box-shadow:var(--shadow)">{{ toast }}</div>
+    </sc-if>
+
+    <!-- ===== INSTALL PROMPT (Android/Chrome) ===== -->
+    <sc-if value="{{ installReady }}">
+      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;box-shadow:var(--shadow);padding:14px 15px;display:flex;align-items:center;gap:13px;max-width:520px;margin:0 auto">
+        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">⤓</div>
+        <div style="flex:1;min-width:0"><div style="font:600 14px 'Space Grotesk',sans-serif;color:var(--text)">Instalează IRIS</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">Acces rapid, offline, ecran complet</div></div>
+        <button onClick="{{ dismissInstall }}" style="border:0;background:transparent;color:var(--faint);font-size:13px;cursor:pointer;padding:6px 4px">Nu acum</button>
+        <button onClick="{{ doInstall }}" style="border:0;background:var(--accent);color:var(--accent-ink);font:600 13px 'Space Grotesk',sans-serif;padding:9px 16px;border-radius:11px;cursor:pointer;flex:0 0 auto">Instalează</button>
+      </div>
+    </sc-if>
+
+    <!-- ===== INSTALL HINT (iOS Safari) ===== -->
+    <sc-if value="{{ iosInstall }}">
+      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;box-shadow:var(--shadow);padding:14px 15px;display:flex;align-items:center;gap:13px;max-width:520px;margin:0 auto">
+        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">⎋</div>
+        <div style="flex:1;min-width:0"><div style="font:600 14px 'Space Grotesk',sans-serif;color:var(--text)">Adaugă IRIS pe ecranul principal</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">Apasă <b style="color:var(--text)">Partajează ⎋</b> apoi <b style="color:var(--text)">Adaugă la ecranul principal</b></div></div>
+        <button onClick="{{ dismissInstall }}" style="border:0;background:transparent;color:var(--faint);font-size:16px;cursor:pointer;padding:6px 4px;flex:0 0 auto">✕</button>
+      </div>
+    </sc-if>
+
+    <!-- ===== LEGEND OVERLAY ===== -->
+    <sc-if value="{{ legendOpen }}">
+      <div data-noprint onClick="{{ closeLegend }}" style="position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))" style-hover="">
+        <div onClick="{{ stop }}" style="width:100%;max-width:540px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Legendă</h3><button onClick="{{ closeLegend }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
+          <div style="overflow:auto;padding:18px 22px 24px">
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 10px">RECOMANDARE</div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+            <sc-for list="{{ legendInd }}" as="l" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:10px"><span style="{{ l.badgeStyle }}">{{ l.icon }} {{ l.name }}</span><span style="font-size:12.5px;color:var(--muted);flex:1">{{ l.desc }}</span></div></sc-for>
+          </div>
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">DOZĂ DE IRADIERE</div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+            <sc-for list="{{ legendDose }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:11px"><div style="display:flex;gap:3px;width:100px">{{ d.segsEl }}</div><span style="font:600 12px 'Space Grotesk',sans-serif;color:{{ d.color }};width:96px">{{ d.band }}</span><span style="font-size:12px;color:var(--muted);white-space:nowrap">{{ d.est }}</span></div></sc-for>
+          </div>
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">TIP INVESTIGAȚIE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
+            <sc-for list="{{ legendMod }}" as="m" hint-placeholder-count="10"><div style="display:flex;align-items:center;gap:9px"><span style="{{ m.chipStyle }}">{{ m.short }}</span><span style="font-size:12.5px;color:var(--text)">{{ m.name }}</span></div></sc-for>
+          </div>
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:16px 0 8px">GRAD RECOMANDARE</div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7">A — dovezi solide · B — dovezi moderate · C — consens / dovezi limitate</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== ABOUT / SOURCE OVERLAY ===== -->
+    <sc-if value="{{ aboutOpen }}">
+      <div data-noprint onClick="{{ closeAbout }}" style="position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))">
+        <div onClick="{{ stop }}" style="width:100%;max-width:540px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Despre IRIS</h3><button onClick="{{ closeAbout }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
+          <div style="overflow:auto;padding:18px 22px 24px">
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 8px">DESPRE GHID</div>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 8px">UTILIZARE INTENȚIONATĂ</div>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">SURSĂ</div>
+          <a href="{{ sourceUrl }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px 15px;text-decoration:none;color:inherit" style-hover="border-color:var(--accent-border)">
+            <span style="font-size:20px;color:var(--accent)">⎋</span>
+            <span style="flex:1"><span style="display:block;font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Ghid de utilizare a investigațiilor radiologice și imagistice medicale</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:4px">Ministerul Sănătății · PDF · document extern</span></span>
+            <span style="color:var(--faint);font-size:16px">›</span>
+          </a>
+
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:20px 0 10px">APLICAȚIE</div>
+          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px">
+            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Mentenanță</span><span>Dr. Costin Stroie</span></div>
+            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Contact</span><a href="mailto:costinstroie@eridu.eu.org" style="color:var(--accent);text-decoration:none">costinstroie@eridu.eu.org</a></div>
+            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Licență</span><span>GPL-3.0</span></div>
+          </div>
+          <a href="{{ repoUrl }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px 15px;text-decoration:none;color:inherit" style-hover="border-color:var(--accent-border)">
+            <span style="font-size:20px;color:var(--accent)">⌥</span>
+            <span style="flex:1"><span style="display:block;font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Cod sursă pe GitHub</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:4px">github.com/cstroie/iris</span></span>
+            <span style="color:var(--faint);font-size:16px">›</span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:880},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;,&quot;options&quot;:[&quot;oklch(0.86 0.2 128)&quot;,&quot;oklch(0.78 0.16 200)&quot;,&quot;oklch(0.8 0.17 85)&quot;,&quot;oklch(0.72 0.17 25)&quot;]},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dark&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;}}">
+class Component extends DCLogic {
+  state = { view:'home', theme:'dark', chapterId:null, subId:null, sitId:null, query:'', results:[], favs:[], recent:[], access:{}, toast:'', legendOpen:false, aboutOpen:false, aiBusy:false, aiNote:'' };
+
+  // ---------- lifecycle ----------
+  componentDidMount(){ this._tries=0; this.initData(); this.initInstall(); this.initHistory(); }
+  initInstall(){
+    // already installed (standalone display) → never prompt
+    const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone===true;
+    let dismissed=false; try{ dismissed = localStorage.getItem('iris.installDismissed')==='1'; }catch(e){}
+    if(standalone || dismissed) return;
+    // Android/Chrome: capture the native prompt
+    this._bip=(e)=>{ e.preventDefault(); this._deferred=e; this.setState({installReady:true}); };
+    window.addEventListener('beforeinstallprompt', this._bip);
+    this._installed=()=>{ this._deferred=null; this.setState({installReady:false, iosInstall:false}); };
+    window.addEventListener('appinstalled', this._installed);
+    // iOS Safari: no API — show manual hint
+    const ua=navigator.userAgent||'';
+    const isIOS=/iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    const isSafari=/^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
+    if(isIOS && isSafari) this.setState({iosInstall:true});
+  }
+  doInstall=async ()=>{
+    if(!this._deferred) return;
+    this._deferred.prompt();
+    try{ await this._deferred.userChoice; }catch(e){}
+    this._deferred=null; this.setState({installReady:false});
+  };
+  dismissInstall=()=>{ try{ localStorage.setItem('iris.installDismissed','1'); }catch(e){} this.setState({installReady:false, iosInstall:false}); };
+  initData(){
+    if(!window.IRIS || !window.IRIS.chapters || !window.IRIS.chapters.length){
+      if(this._tries++ < 60){ setTimeout(()=>this.initData(), 50); return; }
+    }
+    const D = window.IRIS || {chapters:[],subchapters:[],situations:[],recommendations:[],legend:{},synonyms:[]};
+    this.D = D;
+    this.chById = new Map(D.chapters.map(c=>[c.id,c]));
+    this.subById = new Map(D.subchapters.map(s=>[s.id,s]));
+    this.sitById = new Map(D.situations.map(s=>[s.id,s]));
+    this.subsByChap = new Map(); D.subchapters.forEach(s=>{(this.subsByChap.get(s.chapterId)||this.subsByChap.set(s.chapterId,[]).get(s.chapterId)).push(s);});
+    this.sitsBySub = new Map(); D.situations.forEach(s=>{ if(s.placeholder) return; (this.sitsBySub.get(s.subchapterId)||this.sitsBySub.set(s.subchapterId,[]).get(s.subchapterId)).push(s);});
+    this.recsBySit = new Map(); D.recommendations.forEach(r=>{(this.recsBySit.get(r.situationId)||this.recsBySit.set(r.situationId,[]).get(r.situationId)).push(r);});
+    // search index
+    this.index = D.situations.filter(s=>!s.placeholder).map(s=>{
+      const ch=this.chById.get(s.chapterId), sub=this.subById.get(s.subchapterId);
+      const recs=this.recsBySit.get(s.id)||[];
+      const nameHay=this.norm([s.name,sub&&sub.name,ch&&ch.name].filter(Boolean).join(' '));
+      const bodyHay=this.norm(recs.map(r=>r.exam+' '+r.comments+' '+r.otherInfo).join(' '));
+      return {sit:s, chName:ch?ch.name:'', subName:sub?sub.name:'', name:nameHay, nameWords:nameHay.split(/\s+/), body:bodyHay};
+    });
+    // restore prefs
+    try{ const t=localStorage.getItem('iris.theme'); if(t) this.state.theme=t; }catch(e){}
+    try{ const f=JSON.parse(localStorage.getItem('iris.favs')||'[]'); if(Array.isArray(f)) this.state.favs=f; }catch(e){}
+    try{ const r=JSON.parse(localStorage.getItem('iris.recent')||'[]'); if(Array.isArray(r)) this.state.recent=r; }catch(e){}
+    try{ const a=JSON.parse(localStorage.getItem('iris.access')||'{}'); if(a&&typeof a==='object') this.state.access=a; }catch(e){}
+    if(this.props.defaultTheme && !localStorage.getItem('iris.theme')) this.state.theme=this.props.defaultTheme;
+    this.applyRoot();
+    this.forceUpdate();
+    // keyboard: "/" focuses search
+    this._key=(e)=>{ if(e.key==='/' && !/input|textarea/i.test(e.target.tagName)){ e.preventDefault(); this.goSearch(); } };
+    window.addEventListener('keydown',this._key);
+  }
+  componentWillUnmount(){ window.removeEventListener('keydown',this._key); if(this._bip)window.removeEventListener('beforeinstallprompt',this._bip); if(this._installed)window.removeEventListener('appinstalled',this._installed); if(this._pop)window.removeEventListener('popstate',this._pop); }
+  componentDidUpdate(){ this.applyRoot(); }
+  applyRoot(){ if(this.root){ this.root.setAttribute('data-theme', this.state.theme); const a=this.props.accent; if(a) this.root.style.setProperty('--accent', a); } }
+
+  // ---------- helpers ----------
+  norm(s){ return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim(); }
+  get light(){ return this.state.theme==='light'; }
+  HUE={G:220,E:180,T:260,M:300,N:340,X:60,A:20,I:140,D:100,Z:null};
+  HERO=['Investigația potrivită, la momentul potrivit.','Examenul imagistic potrivit, de fiecare dată.','Ce investigație cauți?','De la situația clinică, la investigația potrivită.','Pornește de la simptom. Găsește investigația.','Indicația imagistică. Clarificată.','Mai puține investigații inutile. Mai puțină iradiere.','Găsește investigația imagistică adecvată.'];
+  BANDS=['Fără iradiere','Foarte redusă','Redusă','Medie','Ridicată'];
+  GRADE={A:'dovezi solide',B:'dovezi moderate',C:'consens / dovezi limitate'};
+  chipStyle(tip){
+    const H=this.HUE[tip], base='font:700 10px \'IBM Plex Mono\',monospace;padding:5px 8px;border-radius:7px;white-space:nowrap;letter-spacing:.02em;';
+    if(H==null) return base+(this.light?'background:#e7e9e3;color:#4b5563':'background:#1b1f26;color:#8b93a2');
+    return base+(this.light?`background:oklch(0.95 0.05 ${H});border:1px solid oklch(0.85 0.08 ${H});color:oklch(0.4 0.16 ${H})`:`background:oklch(0.28 0.07 ${H});color:oklch(0.84 0.14 ${H})`);
+  }
+  tipShort(tip){ const m=this.D.legend.modality; return (m&&m.values[tip])?m.values[tip].short:tip; }
+  tipName(tip){ const m=this.D.legend.modality; return (m&&m.values[tip])?m.values[tip].name:tip; }
+  dot(tip){ const H=this.HUE[tip]; const c=H==null?(this.light?'#b6bcc4':'#4a515c'):`oklch(0.68 0.19 ${H})`; return `width:7px;height:7px;border-radius:50%;background:${c};flex:0 0 auto`; }
+  dotOnAccent(tip){ const H=this.HUE[tip]; const c=H==null?'var(--accent-ink)':`oklch(0.4 0.19 ${H})`; return `width:7px;height:7px;border-radius:50%;background:${c};opacity:.8;flex:0 0 auto`; }
+  IND={
+    'Indicat':{h:150,icon:'●'},
+    'Doar în cazuri particulare':{h:88,icon:'◕'},
+    'Doar cu aviz specializat':{h:45,icon:'◑'},
+    'Este necesară justificare detaliată':{h:305,icon:'✎'},
+    'Neindicat în primă intenție':{h:35,icon:'◔'},
+    'Neindicat':{h:20,icon:'⊘'},
+    'Vezi Detalii Ghid!':{h:245,icon:'ⓘ'}
+  };
+  indMeta(ind){ return this.IND[ind]||{h:245,icon:'ⓘ'}; }
+  indIcon(ind){ return this.indMeta(ind).icon; }
+  badgeStyle(ind,size){
+    const H=this.indMeta(ind).h; const pad=size==='sm'?'4px 9px':'6px 11px'; const fs=size==='sm'?'11px':'12.5px';
+    const c=this.light?`background:oklch(0.95 0.05 ${H});border:1px solid oklch(0.8 0.1 ${H});color:oklch(0.4 0.17 ${H})`
+                      :`background:oklch(0.25 0.06 ${H});border:1px solid oklch(0.38 0.09 ${H});color:oklch(0.84 0.15 ${H})`;
+    return `${c};padding:${pad};border-radius:9px;font:600 ${fs} 'Space Grotesk',sans-serif;white-space:nowrap`;
+  }
+  badgeBar(ind){ const H=this.indMeta(ind).h; return this.light?`oklch(0.58 0.17 ${H})`:`oklch(0.72 0.16 ${H})`; }
+  doseFill(level){ const H={0:150,1:128,2:78,3:45,4:26}[level]; return this.light?`oklch(0.58 0.17 ${H})`:`oklch(0.76 0.17 ${H})`; }
+  doseTextColor(level){ const H={0:150,1:128,2:78,3:45,4:26}[level]; return this.light?`oklch(0.46 0.16 ${H})`:`oklch(0.8 0.15 ${H})`; }
+  doseSegs(level){ const fill=this.doseFill(level); const arr=[]; for(let i=0;i<5;i++){ const on=i<level; arr.push({style:`width:17px;height:7px;border-radius:2px;background:${on?fill:'var(--dose-empty)'}`}); } return arr; }
+  doseInfo(r){
+    if(r.doseMin==null && r.doseMax==null) return {hasDose:false};
+    const lvl = r.doseMax!=null?r.doseMax:r.doseMin;
+    const mn = r.doseMin!=null?r.doseMin:lvl;
+    const band=this.BANDS[lvl]||'';
+    let label;
+    if(lvl===0) label='FĂRĂ IRADIERE';
+    else if(mn!==lvl && this.BANDS[mn]) label=`DOZĂ DE IRADIERE ${this.BANDS[mn].toUpperCase()}–${band.toUpperCase()}`;
+    else label=`DOZĂ DE IRADIERE ${band.toUpperCase()}`;
+    return {hasDose:true, segs:this.doseSegs(lvl), color:this.doseTextColor(lvl), label};
+  }
+  bestRec(recs){ // most-indicated (lowest tier)
+    const tier=r=>{const v=this.D.legend.indication&&this.D.legend.indication.values[r.indication]; return v?(v.tier||9):9;};
+    return recs.slice().sort((a,b)=>tier(a)-tier(b))[0];
+  }
+  dotsFor(recs){ const seen=[]; recs.forEach(r=>{ if(!seen.includes(r.tip)) seen.push(r.tip); }); return seen.slice(0,4).map(t=>({style:this.dot(t)})); }
+  sitCard(sit, onOpen, withCrumb){
+    const recs=this.recsBySit.get(sit.id)||[]; const best=this.bestRec(recs);
+    const bestInd=best?best.indication:'';
+    const ch=this.chById.get(sit.chapterId), sub=this.subById.get(sit.subchapterId);
+    return {
+      name:sit.name, onOpen,
+      crumb: withCrumb?`${ch?ch.name:''} › ${sub?sub.name:''}`:'',
+      bestExam: best?best.exam:'—', bestIcon:this.indIcon(bestInd),
+      bestStyle: this.badgeStyle(bestInd,'sm'),
+      recMeta: recs.length+(recs.length===1?' recomandare':' recomandări'),
+      dots: this.dotsFor(recs)
+    };
+  }
+
+  // ---------- navigation ----------
+  scrollTop(){ requestAnimationFrame(()=>{ try{window.scrollTo(0,0);}catch(e){} }); }
+  SNAP=['view','chapterId','subId','sitId','query','legendOpen','aboutOpen'];
+  snapshot(patch){ const s={}; this.SNAP.forEach(k=>{ s[k]=(patch&&k in patch)?patch[k]:this.state[k]; }); return s; }
+  navTo(patch,opts){ try{ history.pushState(this.snapshot(patch),''); }catch(e){} this.setState(patch); if(!(opts&&opts.noScroll)) this.scrollTop(); }
+  initHistory(){
+    this._pop=(e)=>{ const s=e.state; if(!s){ this.setState({view:'home',legendOpen:false,aboutOpen:false}); this.scrollTop(); return; }
+      const patch={}; this.SNAP.forEach(k=>{ if(k in s) patch[k]=s[k]; });
+      this.setState(patch);
+      if(patch.view==='search' && patch.query) this.runSearch(patch.query);
+      this.scrollTop();
+    };
+    window.addEventListener('popstate', this._pop);
+    try{ history.replaceState(this.snapshot(),''); }catch(e){}
+  }
+  goHome=()=>{ this.navTo({view:'home',legendOpen:false,aboutOpen:false}); };
+  goSearch=()=>{ this.navTo({view:'search',legendOpen:false,aboutOpen:false}); setTimeout(()=>{ if(this.input) this.input.focus(); },60); };
+  goFavs=()=>{ this.navTo({view:'favs',legendOpen:false,aboutOpen:false}); };
+  openChapter=(id)=>{ this.navTo({view:'chapter',chapterId:id,legendOpen:false}); };
+  openSub=(id)=>{ const s=this.subById.get(id); this.navTo({view:'sub',subId:id,chapterId:s?s.chapterId:this.state.chapterId,legendOpen:false}); };
+  openSit=(id)=>{ const s=this.sitById.get(id); const recent=[id,...(this.state.recent||[]).filter(x=>x!==id)].slice(0,10); const access={...(this.state.access||{})}; if(s) access[s.chapterId]=(access[s.chapterId]||0)+1; try{localStorage.setItem('iris.recent',JSON.stringify(recent));localStorage.setItem('iris.access',JSON.stringify(access));}catch(e){} this.navTo({view:'sit',sitId:id,subId:s?s.subchapterId:this.state.subId,chapterId:s?s.chapterId:this.state.chapterId,legendOpen:false,recent,access}); };
+  clearRecent=()=>{ try{localStorage.removeItem('iris.recent');}catch(e){} this.setState({recent:[]}); };
+  backToChapter=()=>{ this.navTo({view:'chapter'}); };
+  backToSub=()=>{ this.navTo({view:'sub'}); };
+  toggleTheme=()=>{ const t=this.light?'dark':'light'; this.setState({theme:t}); try{localStorage.setItem('iris.theme',t);}catch(e){} };
+  openLegend=()=>this.navTo({legendOpen:true},{noScroll:true});
+  closeLegend=()=>{ if(this.state.legendOpen && history.state && history.state.legendOpen){ history.back(); } else this.setState({legendOpen:false}); };
+  openAbout=()=>this.navTo({aboutOpen:true},{noScroll:true});
+  closeAbout=()=>{ if(this.state.aboutOpen && history.state && history.state.aboutOpen){ history.back(); } else this.setState({aboutOpen:false}); };
+  stop=(e)=>{ e.stopPropagation(); };
+
+  // ---------- search ----------
+  onInput=(e)=>{ const q=e.target.value; this.setState({query:q, aiNote:''}); this.runSearch(q); };
+  setQuery=(q)=>{ this.navTo({view:'search',query:q,aiNote:''}); this.runSearch(q); setTimeout(()=>{ if(this.input) this.input.focus(); },60); };
+  clearQuery=()=>{ this.setState({query:'',results:[],aiNote:''}); if(this.input) this.input.focus(); };
+  lev(a,b){ const m=a.length,n=b.length; if(Math.abs(m-n)>1) return 2; const d=[]; for(let i=0;i<=m;i++)d[i]=[i]; for(let j=0;j<=n;j++)d[0][j]=j; for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
+  expand(raw, tokens){
+    const set=new Set(tokens);
+    (this.D.synonyms||[]).forEach(g=>{
+      const hit=g.terms.some(t=>{ const nt=this.norm(t); return raw.includes(nt)||nt.includes(raw)||nt.split(/\s+/).some(w=>tokens.includes(w)); });
+      if(hit) g.expand.forEach(e=>this.norm(e).split(/\s+/).forEach(w=>{ if(w.length>1) set.add(w); }));
+    });
+    return [...set];
+  }
+  runSearch(q){
+    const raw=this.norm(q); if(raw.length<2){ this.setState({results:[]}); return; }
+    const tokens=raw.split(/\s+/).filter(t=>t.length>1);
+    const terms=this.expand(raw,tokens);
+    const orig=new Set(tokens);
+    const out=[];
+    for(const it of this.index){
+      let sc=0;
+      for(const t of terms){
+        const w=orig.has(t)?1:0.6;
+        if(it.name.includes(t)) sc+=4*w;
+        else if(it.body.includes(t)) sc+=1.4*w;
+        else if(t.length>=4 && it.nameWords.some(x=>Math.abs(x.length-t.length)<=1 && this.lev(x,t)<=1)) sc+=2.4*w;
+      }
+      if(sc>0) out.push({it,sc});
+    }
+    out.sort((a,b)=>b.sc-a.sc);
+    this.setState({results: out.slice(0,60).map(o=>o.it.sit)});
+  }
+  onAI=async ()=>{
+    if(this.state.aiBusy) return;
+    const q=this.state.query.trim(); if(!q){ if(this.input)this.input.focus(); return; }
+    this.setState({aiBusy:true, aiNote:''});
+    try{
+      const prompt=`Ești asistent pentru un ghid de indicații radioimagistice în limba română. Utilizatorul caută liber: "${q}". Returnează STRICT un array JSON de 3-7 termeni clinici în limba română (situații clinice, simptome, regiuni anatomice sau denumiri de examinări) care ar apărea într-un astfel de ghid și corespund intenției. Doar JSON, fără explicații. Exemplu format: ["perimetru cranian","macrocranie","hidrocefalie"]`;
+      const resp=await window.claude.complete(prompt);
+      let terms=[]; const m=resp&&resp.match(/\[[\s\S]*\]/); if(m){ try{ terms=JSON.parse(m[0]); }catch(e){} }
+      terms=(terms||[]).filter(t=>typeof t==='string').slice(0,7);
+      if(terms.length){
+        const norm=terms.map(t=>this.norm(t)).filter(Boolean);
+        const words=new Set(); norm.forEach(t=>t.split(/\s+/).forEach(w=>{if(w.length>1)words.add(w);}));
+        const arr=[...words]; const out=[];
+        for(const it of this.index){ let sc=0; for(const t of arr){ if(it.name.includes(t))sc+=4; else if(it.body.includes(t))sc+=1.4; } if(sc>0)out.push({it,sc}); }
+        out.sort((a,b)=>b.sc-a.sc);
+        this.setState({results:out.slice(0,60).map(o=>o.it.sit), aiNote:`Interpretat ca: ${terms.join(', ')}`, aiBusy:false});
+      } else { this.setState({aiBusy:false, aiNote:'Nu am putut interpreta. Încearcă alți termeni.'}); }
+    }catch(e){ this.setState({aiBusy:false, aiNote:'Interpretarea AI nu este disponibilă acum (offline?). Se folosește căutarea locală.'}); }
+  }
+
+  // ---------- favorites / share / print ----------
+  toggleFav=()=>{ const id=this.state.sitId; const favs=this.state.favs.includes(id)?this.state.favs.filter(x=>x!==id):[...this.state.favs,id]; this.setState({favs, toast: this.state.favs.includes(id)?'Eliminat din salvate':'Salvat ★'}); try{localStorage.setItem('iris.favs',JSON.stringify(favs));}catch(e){} clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800); };
+  doPrint=()=>{ const prev=this.state.theme; const run=()=>{ try{window.print();}catch(e){} if(this.state.theme!==prev) this.setState({theme:prev}); }; if(prev!=='light'){ this.setState({theme:'light'}); setTimeout(run,140); } else { run(); } };
+  doShare=async ()=>{
+    const s=this.sitById.get(this.state.sitId); if(!s) return;
+    const recs=this.recsBySit.get(s.id)||[];
+    const text=`${s.name}\n\n`+recs.map(r=>`• ${r.exam} — ${r.indication}${r.grade?` (grad ${r.grade})`:''}`).join('\n')+`\n\n— Iris · Ghid indicații radioimagistice`;
+    try{ if(navigator.share){ await navigator.share({title:'Iris — '+s.name, text}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+    try{ await navigator.clipboard.writeText(text); this.setState({toast:'Copiat în clipboard'}); }catch(e){ this.setState({toast:'Nu s-a putut copia'}); }
+    clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800);
+  }
+
+  // ---------- render ----------
+  renderVals(){
+    const D=this.D||{chapters:[],legend:{}}; const v=this.state.view;
+    const navStyle=(active)=>`flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0;border:0;background:transparent;cursor:pointer;color:${active?'var(--accent)':'var(--faint)'}`;
+    const chipS=`font:500 11.5px 'IBM Plex Mono',monospace;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:7px 12px;border-radius:20px;cursor:pointer;white-space:nowrap`;
+    const chipAccent=`font:500 11.5px 'IBM Plex Mono',monospace;background:var(--accent-dim);border:1px solid var(--accent-border);color:var(--accent);padding:7px 12px;border-radius:20px;cursor:pointer;white-space:nowrap`;
+    const examples=[
+      {label:'dispnee →', q:'dispnee', accent:true},
+      {label:'AVC', q:'accident vascular cerebral'},
+      {label:'lombalgie', q:'durere lombara'},
+      {label:'apendicită', q:'apendicita'},
+      {label:'colică renală', q:'colica renala'},
+      {label:'nodul tiroidian', q:'tiroida nodul'}
+    ].map(c=>({label:c.label, style:c.accent?chipAccent:chipS, onClick:()=>this.setQuery(c.q)}));
+
+    const vals={
+      rootRef:(el)=>{ this.root=el; if(el){ el.setAttribute('data-theme',this.state.theme); if(this.props.accent) el.style.setProperty('--accent',this.props.accent);} },
+      themeIcon:this.light?'☀':'☾',
+      isHome:v==='home', isSearch:v==='search', isChapter:v==='chapter', isSub:v==='sub', isSit:v==='sit', isFavs:v==='favs',
+      goHome:this.goHome, goSearch:this.goSearch, goFavs:this.goFavs, toggleTheme:this.toggleTheme,
+      openLegend:this.openLegend, closeLegend:this.closeLegend, stop:this.stop, legendOpen:this.state.legendOpen,
+      aboutOpen:this.state.aboutOpen, openAbout:this.openAbout, closeAbout:this.closeAbout,
+      sourceUrl:'https://ms.ro/media/documents/Ghid-de-utilizare-a-investiga%C8%9Biilor-radiologice-%C5%9Fi-imagistice-medicale.pdf',
+      repoUrl:'https://github.com/cstroie/iris',
+      toast:this.state.toast,
+      installReady:this.state.installReady, iosInstall:this.state.iosInstall, doInstall:this.doInstall, dismissInstall:this.dismissInstall,
+      navHomeStyle:navStyle(v==='home'), navSearchStyle:navStyle(v==='search'), navFavStyle:navStyle(v==='favs'),
+      favBadge: this.state.favs.length?` ·${this.state.favs.length}`:'',
+      countSituations:(D.meta&&D.meta.counts.situations)||this.index?this.index.length:0,
+      countRecs:(D.meta&&D.meta.counts.recommendations)||0,
+      countChapters:D.chapters.length,
+      exampleChips:examples
+    };
+
+    // HOME chapters
+    if(v==='home'){
+      if(!this._heroTitle){ const H=this.HERO; this._heroTitle=H[Math.floor(Math.random()*H.length)]; }
+      vals.heroTitle=this._heroTitle;
+      const recent=(this.state.recent||[]).map(id=>this.sitById.get(id)).filter(Boolean);
+      vals.hasRecent=recent.length>0; vals.clearRecent=this.clearRecent;
+      const acc=this.state.access||{}; const featuredSet=new Set(Object.keys(acc).filter(k=>acc[k]>0).sort((a,b)=>acc[b]-acc[a]).slice(0,3));
+      vals.recentVM=recent.slice(0,8).map(q=>{ const card=this.sitCard(q, ()=>this.openSit(q.id), true); card.crumb=card.crumb.toUpperCase(); return card; });
+      vals.chaptersVM=D.chapters.map((c,i)=>{
+        const recs=(this.sitsBySub.get?0:0);
+        const subs=this.subsByChap.get(c.id)||[];
+        const featured=featuredSet.has(c.id);
+        const dots=[]; const tipset=[];
+        subs.forEach(s=>{ (this.sitsBySub.get(s.id)||[]).forEach(q=>{ (this.recsBySit.get(q.id)||[]).forEach(r=>{ if(!tipset.includes(r.tip))tipset.push(r.tip); }); }); });
+        return {
+          name:c.name, onOpen:()=>this.openChapter(c.id),
+          cardBg: 'var(--surface)',
+          cardBorder: featured?'var(--accent-border)':'var(--border)',
+          nameColor: 'var(--text)',
+          metaColor: 'var(--faint)',
+          meta:`${subs.length} ${subs.length===1?'subcapitol':'subcapitole'} · ${c.count} situații`,
+          dots: tipset.slice(0,3).map(t=>({style:this.dot(t)}))
+        };
+      });
+    }
+
+    // SEARCH
+    if(v==='search'){
+      const hasQ=this.state.query.trim().length>0;
+      const res=this.state.results||[];
+      vals.query=this.state.query; vals.hasQuery=hasQ;
+      vals.inputRef=(el)=>{ this.input=el; };
+      vals.onInput=this.onInput; vals.clearQuery=this.clearQuery;
+      vals.aiAvailable = typeof window!=='undefined' && window.claude && typeof window.claude.complete==='function';
+      vals.aiBusy=this.state.aiBusy; vals.aiNote=this.state.aiNote;
+      vals.aiHint = this.state.aiBusy?'Se interpretează…':'căutare non-specifică';
+      vals.aiBtnStyle=`display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent-border);background:var(--accent-dim);color:var(--accent);border-radius:11px;padding:9px 14px;font:600 12.5px 'Space Grotesk',sans-serif;cursor:${this.state.aiBusy?'default':'pointer'};opacity:${this.state.aiBusy?.6:1}`;
+      vals.aiSpinStyle = this.state.aiBusy?`width:12px;height:12px;border:2px solid var(--accent);border-right-color:transparent;border-radius:50%;display:inline-block;animation:irisspin .7s linear infinite`:'display:none';
+      vals.aiSpin=this.state.aiBusy; vals.onAI=this.onAI;
+      vals.showSearchIntro = !hasQ;
+      vals.hasResults = hasQ && res.length>0;
+      vals.noResults = hasQ && this.norm(this.state.query).length>=2 && res.length===0;
+      vals.resultLabel = `${res.length} ${res.length===1?'REZULTAT':'REZULTATE'}`;
+      vals.resultsVM = res.map(sit=>this.sitCard(sit, ()=>this.openSit(sit.id), true)).map((c,i)=>({...c,
+        crumb:c.crumb.toUpperCase()
+      }));
+    }
+
+    // CHAPTER
+    if(v==='chapter'){
+      const c=this.chById.get(this.state.chapterId);
+      vals.curChapterName=c?c.name:''; vals.curChapterMeta=c?`${(this.subsByChap.get(c.id)||[]).length} subcapitole · ${c.count} situații`:'';
+      vals.subsVM=(this.subsByChap.get(this.state.chapterId)||[]).map((s,i)=>({
+        name:s.name, count:s.count+'', num:String(i+1).padStart(2,'0'), onOpen:()=>this.openSub(s.id)
+      }));
+    }
+
+    // SUB
+    if(v==='sub'){
+      const s=this.subById.get(this.state.subId), c=this.chById.get(this.state.chapterId);
+      vals.curSubName=s?s.name:'';
+      vals.subCrumbs=[{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:false}];
+      vals.curSubMeta=s?`${(this.sitsBySub.get(s.id)||[]).length} situații clinice`:'';
+      vals.backToChapter=this.backToChapter;
+      vals.sitsVM=(this.sitsBySub.get(this.state.subId)||[]).map(q=>this.sitCard(q, ()=>this.openSit(q.id), false));
+    }
+
+    // SIT
+    if(v==='sit'){
+      const s=this.sitById.get(this.state.sitId), c=this.chById.get(this.state.chapterId), sub=this.subById.get(this.state.subId);
+      vals.curSitName=s?s.name:'';
+      vals.sitPrintCrumb=[(c?c.name:''),(sub?sub.name:'')].filter(Boolean).join('  /  ');
+      vals.sitCrumbs=[{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:false},{label:(sub?sub.name:'').toUpperCase(), onClick:()=>this.openSub(this.state.subId), sep:true}];
+      vals.backToSub=this.backToSub;
+      const fav=this.state.favs.includes(this.state.sitId);
+      vals.favActive=fav; vals.favIcon=fav?'★':'☆'; vals.favLabel=fav?'Salvat':'Salvează';
+      vals.favBtnStyle=`display:inline-flex;align-items:center;gap:7px;border:1px solid ${fav?'var(--accent-border)':'var(--border)'};background:${fav?'var(--accent-dim)':'var(--surface)'};color:${fav?'var(--accent)':'var(--muted)'};border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer`;
+      vals.toggleFav=this.toggleFav; vals.doShare=this.doShare; vals.doPrint=this.doPrint;
+      const recs=this.recsBySit.get(this.state.sitId)||[];
+      vals.recsVM=recs.map(r=>{
+        const dose=this.doseInfo(r);
+        return {
+          tipShort:this.tipShort(r.tip), chipStyle:this.chipStyle(r.tip),
+          exam:r.exam, indication:r.indication||'—', indIcon:this.indIcon(r.indication),
+          badgeStyle:this.badgeStyle(r.indication), barColor:this.badgeBar(r.indication),
+          hasGrade:!!r.grade, grade:r.grade, gradeLine: r.grade?`Grad ${r.grade} — ${this.GRADE[r.grade]||''}`:'',
+          hasComments:!!r.comments, comments:r.comments,
+          hasOther:!!r.otherInfo, otherInfo:r.otherInfo,
+          hasDose:dose.hasDose, doseSegs:dose.segs||[], doseColor:dose.color||'var(--muted)', doseLabel:dose.label||''
+        };
+      });
+    }
+
+    // FAVS
+    if(v==='favs'){
+      const favSits=this.state.favs.map(id=>this.sitById.get(id)).filter(Boolean);
+      vals.hasFavs=favSits.length>0; vals.noFavs=favSits.length===0;
+      vals.favsVM=favSits.map(q=>{ const card=this.sitCard(q, ()=>this.openSit(q.id), true); card.crumb=card.crumb.toUpperCase(); return card; });
+    }
+
+    // LEGEND
+    if(this.state.legendOpen){
+      const ind=D.legend.indication?D.legend.indication.values:{};
+      vals.legendInd=Object.keys(ind).map(k=>({name:k, desc:ind[k].desc, icon:this.indIcon(k), badgeStyle:this.badgeStyle(k,'sm')}));
+      const scale=(D.legend.dose&&D.legend.dose.scale)||[];
+      vals.legendDose=scale.map(d=>({ band:d.band, est:d.est, color:this.doseTextColor(d.level),
+        segsEl: React.createElement('span',{style:{display:'flex',gap:'3px'}}, this.doseSegs(d.level).map((s,i)=>React.createElement('span',{key:i,style:this.parseStyle(s.style)}))) }));
+      const mod=D.legend.modality?D.legend.modality.values:{};
+      vals.legendMod=Object.keys(mod).map(k=>({short:mod[k].short, name:mod[k].name, chipStyle:this.chipStyle(k)}));
+    }
+
+    return vals;
+  }
+  badgeBar2_removed(){}
+  parseStyle(str){ const o={}; str.split(';').forEach(p=>{ const i=p.indexOf(':'); if(i>0){ const k=p.slice(0,i).trim().replace(/-([a-z])/g,(m,c)=>c.toUpperCase()); o[k]=p.slice(i+1).trim(); } }); return o; }
+}
+</script>
+</body>
+</html>

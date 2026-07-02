@@ -1,0 +1,146 @@
+{
+  "modality": {
+    "label": "Tip investigație",
+    "values": {
+      "G": {
+        "name": "Radiografie",
+        "short": "Rg",
+        "desc": "Radiografie / radiologie convențională"
+      },
+      "E": {
+        "name": "Ecografie",
+        "short": "Eco",
+        "desc": "Ultrasonografie, Doppler, ecocardiografie"
+      },
+      "T": {
+        "name": "CT",
+        "short": "CT",
+        "desc": "Tomografie computerizată"
+      },
+      "M": {
+        "name": "IRM",
+        "short": "IRM",
+        "desc": "Imagistică prin rezonanță magnetică"
+      },
+      "N": {
+        "name": "Medicină nucleară",
+        "short": "MN",
+        "desc": "Scintigrafie, PET-CT, SPECT-CT"
+      },
+      "X": {
+        "name": "Radioscopie / contrast",
+        "short": "Rx-C",
+        "desc": "Examinări fluoroscopice și cu substanță de contrast (UIV, irigografie, tranzit)"
+      },
+      "A": {
+        "name": "Angiografie",
+        "short": "Angio",
+        "desc": "Angiografie / cateterism diagnostic"
+      },
+      "I": {
+        "name": "Radiologie intervențională",
+        "short": "RI",
+        "desc": "Proceduri intervenționale ghidate imagistic"
+      },
+      "D": {
+        "name": "Endoscopie / altele",
+        "short": "Endo",
+        "desc": "Ecoendoscopie, ERCP, osteodensitometrie, videocapsulă"
+      },
+      "Z": {
+        "name": "Altele / neîncadrabil",
+        "short": "—",
+        "desc": "Situație neîncadrabilă sau explorări generice"
+      }
+    }
+  },
+  "indication": {
+    "label": "Statut recomandare",
+    "values": {
+      "Indicat": {
+        "tier": 1,
+        "tone": "go",
+        "desc": "Investigație indicată / recomandată."
+      },
+      "Doar în cazuri particulare": {
+        "tier": 2,
+        "tone": "caution",
+        "desc": "Indicată doar în situații particulare selectate."
+      },
+      "Doar cu aviz specializat": {
+        "tier": 3,
+        "tone": "caution",
+        "desc": "Se efectuează doar cu aviz de specialitate."
+      },
+      "Neindicat în primă intenție": {
+        "tier": 4,
+        "tone": "stop",
+        "desc": "Nu este investigația de primă intenție."
+      },
+      "Neindicat": {
+        "tier": 5,
+        "tone": "stop",
+        "desc": "Nu este indicată."
+      },
+      "Este necesară justificare detaliată": {
+        "tier": 2,
+        "tone": "caution",
+        "desc": "Necesită justificare clinică detaliată."
+      },
+      "Vezi Detalii Ghid!": {
+        "tier": 0,
+        "tone": "info",
+        "desc": "Consultați detaliile din ghid."
+      }
+    }
+  },
+  "grade": {
+    "label": "Grad recomandare (nivel de dovezi)",
+    "values": {
+      "A": {
+        "desc": "Nivel de dovezi ridicat (studii/meta-analize solide)."
+      },
+      "B": {
+        "desc": "Nivel de dovezi moderat."
+      },
+      "C": {
+        "desc": "Recomandare bazată pe consens / dovezi limitate."
+      }
+    }
+  },
+  "dose": {
+    "label": "Doză de iradiere",
+    "scale": [
+      {
+        "level": 0,
+        "band": "Fără iradiere",
+        "note": "Ecografie, IRM — fără radiații ionizante.",
+        "est": "fără radiații ionizante"
+      },
+      {
+        "level": 1,
+        "band": "Foarte redusă",
+        "note": "echivalent cu câteva zile–săptămâni de fond natural",
+        "est": "≈ zile–săptămâni de fond natural"
+      },
+      {
+        "level": 2,
+        "band": "Redusă",
+        "note": "echivalent cu câteva luni–1 an de fond natural",
+        "est": "≈ luni–1 an de fond natural"
+      },
+      {
+        "level": 3,
+        "band": "Medie",
+        "note": "echivalent cu ~1,5–2 ani de fond natural",
+        "est": "≈ 1,5–2 ani de fond natural"
+      },
+      {
+        "level": 4,
+        "band": "Ridicată",
+        "note": "peste ~2 ani de fond natural",
+        "est": "peste ~2 ani de fond natural"
+      }
+    ]
+  }
+}
