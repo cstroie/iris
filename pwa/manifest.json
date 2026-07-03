@@ -1,7 +1,7 @@
 {
   "name": "IRIS — Indicații RadioImagistice Structurate",
   "short_name": "IRIS",
-  "description": "Ghid de indicații radioimagistice — navigare și căutare pe capitole, subcapitole și situații clinice.",
+  "description": "Indicații radioimagistice structurate — navigare și căutare pe capitole, subcapitole și situații clinice.",
   "lang": "ro",
   "start_url": "./index.html",
   "scope": "./",

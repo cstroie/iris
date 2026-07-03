@@ -430,7 +430,7 @@
       "hipertensiune"
     ],
     "expand": [
-      "hipertensiune arteriales",
+      "aorta",
       "cardiac",
       "vascular"
     ]
@@ -516,6 +516,309 @@
       "cardiac",
       "torace",
       "coronar"
+    ]
+  },
+  {
+    "terms": [
+      "traumatism cranian",
+      "tce",
+      "tcc",
+      "head injury",
+      "lovitura la cap",
+      "traumatism cranio-cerebral"
+    ],
+    "expand": [
+      "cranio",
+      "cerebral",
+      "traumatism",
+      "encefalic"
+    ]
+  },
+  {
+    "terms": [
+      "tumora cerebrala",
+      "brain tumor",
+      "masa cerebrala"
+    ],
+    "expand": [
+      "cerebral",
+      "tumora",
+      "medular"
+    ]
+  },
+  {
+    "terms": [
+      "ameteala",
+      "vertij",
+      "dizziness",
+      "tulburari de echilibru"
+    ],
+    "expand": [
+      "cerebral",
+      "temporal",
+      "urechea"
+    ]
+  },
+  {
+    "terms": [
+      "embolie pulmonara",
+      "tep",
+      "pulmonary embolism",
+      "cheag la plaman",
+      "trombembolism pulmonar"
+    ],
+    "expand": [
+      "embolie",
+      "pulmon",
+      "torace"
+    ]
+  },
+  {
+    "terms": [
+      "disectie de aorta",
+      "anevrism de aorta",
+      "aortic dissection",
+      "anevrism aortic"
+    ],
+    "expand": [
+      "aorta",
+      "disectie",
+      "anevrism",
+      "vascular"
+    ]
+  },
+  {
+    "terms": [
+      "tromboza venoasa",
+      "tvp",
+      "cheag la picior",
+      "tromboza venoasa profunda",
+      "flebita"
+    ],
+    "expand": [
+      "tromboza",
+      "vascular",
+      "picior"
+    ]
+  },
+  {
+    "terms": [
+      "pancreatita",
+      "durere de pancreas",
+      "inflamatie pancreas"
+    ],
+    "expand": [
+      "pancreas",
+      "abdomen",
+      "abdominala"
+    ]
+  },
+  {
+    "terms": [
+      "ocluzie intestinala",
+      "blocaj intestinal",
+      "bowel obstruction",
+      "oprirea tranzitului"
+    ],
+    "expand": [
+      "ocluzie",
+      "intestin",
+      "colon",
+      "abdomen"
+    ]
+  },
+  {
+    "terms": [
+      "hemoragie digestiva",
+      "melena",
+      "scaun negru",
+      "rectoragie",
+      "sange in scaun",
+      "gi bleeding"
+    ],
+    "expand": [
+      "hemoragie",
+      "melena",
+      "rectoragie",
+      "colon",
+      "stomac"
+    ]
+  },
+  {
+    "terms": [
+      "litiaza biliara",
+      "calcul biliar",
+      "colecistita",
+      "piatra la fiere",
+      "durere biliara"
+    ],
+    "expand": [
+      "colecist",
+      "colecistita",
+      "ficat",
+      "abdomen"
+    ]
+  },
+  {
+    "terms": [
+      "retentie urinara",
+      "nu pot urina",
+      "glob vezical"
+    ],
+    "expand": [
+      "vezical",
+      "prostata",
+      "urinar"
+    ]
+  },
+  {
+    "terms": [
+      "sinuzita",
+      "dureri de sinus",
+      "probleme sinusuri"
+    ],
+    "expand": [
+      "sinuzita",
+      "sinusuri",
+      "orbita"
+    ]
+  },
+  {
+    "terms": [
+      "durere de genunchi",
+      "entorsa",
+      "durere articulara"
+    ],
+    "expand": [
+      "genunchi",
+      "entorsa",
+      "articulatii",
+      "traumatism"
+    ]
+  },
+  {
+    "terms": [
+      "durere de umar",
+      "luxatie de umar",
+      "umar dureros"
+    ],
+    "expand": [
+      "umar",
+      "articulatii",
+      "traumatism"
+    ]
+  },
+  {
+    "terms": [
+      "scolioza",
+      "cifoza",
+      "deformare coloana",
+      "deviatie coloana"
+    ],
+    "expand": [
+      "scolioza",
+      "coloana",
+      "vertebrala"
+    ]
+  },
+  {
+    "terms": [
+      "metastaze osoase",
+      "dureri osoase difuze",
+      "secundare osoase"
+    ],
+    "expand": [
+      "metastaze",
+      "osoase",
+      "osoasa"
+    ]
+  },
+  {
+    "terms": [
+      "durere testiculara",
+      "scrot umflat",
+      "torsiune testiculara",
+      "durere scrotala"
+    ],
+    "expand": [
+      "testiculara",
+      "testicul",
+      "scrotal"
+    ]
+  },
+  {
+    "terms": [
+      "cancer esofagian",
+      "tumora esofag",
+      "disfagie"
+    ],
+    "expand": [
+      "esofagian",
+      "esofag",
+      "torace"
+    ]
+  },
+  {
+    "terms": [
+      "cancer laringian",
+      "tumora laringe",
+      "rgutural",
+      "disfonie"
+    ],
+    "expand": [
+      "laringian",
+      "laringe",
+      "gat"
+    ]
+  },
+  {
+    "terms": [
+      "cancer ovarian",
+      "tumora ovar",
+      "masa anexiala"
+    ],
+    "expand": [
+      "ovarian",
+      "anexe",
+      "pelvin",
+      "uter"
+    ]
+  },
+  {
+    "terms": [
+      "nodul mamar",
+      "durere san",
+      "secretie mamelonara",
+      "screening san"
+    ],
+    "expand": [
+      "mamografie",
+      "mamar",
+      "san"
+    ]
+  },
+  {
+    "terms": [
+      "splina marita",
+      "splenomegalie",
+      "traumatism splina"
+    ],
+    "expand": [
+      "splenice",
+      "splenica"
+    ]
+  },
+  {
+    "terms": [
+      "icter mecanic",
+      "ochi galbeni",
+      "bilirubina crescuta"
+    ],
+    "expand": [
+      "icter",
+      "colestaza",
+      "ficat",
+      "colecist"
     ]
   }
 ]

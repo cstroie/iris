@@ -45,7 +45,7 @@
 
 <template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#0b0d10"/><circle cx="50" cy="50" r="20" fill="none" stroke="#b6f000" stroke-width="4"/><circle cx="50" cy="50" r="6" fill="#b6f000"/></svg></template>
 <div data-theme="dark" ref="{{ rootRef }}" style="min-height:100vh;background:var(--bg);color:var(--text)">
-  <div style="max-width:940px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative">
+  <div style="max-width:100%;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative">
 
     <!-- ===== HEADER ===== -->
     <header data-noprint style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:color-mix(in srgb, var(--bg) 82%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)">
@@ -65,7 +65,7 @@
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
       <div style="">
         <div style="padding:34px 4px 22px">
-          <h1 style="font:700 34px/1.12 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;max-width:15ch">{{ heroTitle }}</h1>
+          <h1 style="font:700 34px/1.12 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;max-width:640px">{{ heroTitle }}</h1>
           <p style="font-size:15px;line-height:1.6;color:var(--muted);margin:0;max-width:520px">Ghid de indicații radioimagistice — {{ countSituations }} situații clinice, {{ countRecs }} recomandări. Caută un simptom sau răsfoiește pe capitole.</p>
         </div>
         <div role="button" onClick="{{ goSearch }}" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 17px;cursor:text;box-shadow:var(--shadow)">
@@ -73,7 +73,7 @@
           <span style="font-size:15px;color:var(--faint)">Caută simptom, examen sau fragment de cuvânt…</span>
           <span style="margin-left:auto;font:600 10px 'IBM Plex Mono',monospace;background:var(--surface-2);border:1px solid var(--border);color:var(--faint);padding:4px 7px;border-radius:6px">/</span>
         </div>
-        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin:20px 4px 10px">EXEMPLE</div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin:20px 4px 10px">ÎNCEARCĂ</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="5">
             <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
@@ -224,22 +224,34 @@
         </div>
         <div data-noprint style="display:flex;align-items:center;gap:8px;padding:20px 2px 4px"><button onClick="{{ backToSub }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><div style="display:flex;align-items:center;flex-wrap:wrap;line-height:1.5"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span style="color:var(--faint);opacity:.5;margin:0 5px;font:500 11px 'IBM Plex Mono',monospace">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;color:var(--faint);cursor:pointer" style-hover="color:var(--accent)">{{ cr.label }}</span></sc-for></div></div>
         <h2 style="font:700 27px/1.14 'Space Grotesk',sans-serif;margin:10px 2px 16px;letter-spacing:-.01em">{{ curSitName }}</h2>
-        <div data-noprint style="display:flex;gap:8px;margin:0 0 22px;flex-wrap:wrap">
+        <div data-noprint style="display:flex;gap:8px;margin:0 0 22px;flex-wrap:nowrap;overflow-x:auto">
           <button onClick="{{ toggleFav }}" style="{{ favBtnStyle }}">{{ favIcon }} {{ favLabel }}</button>
           <button onClick="{{ doShare }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⤴ Distribuie</button>
           <button onClick="{{ doPrint }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⎙ Printează</button>
+          <button onClick="{{ togglePregnancy }}" style="{{ pregBtnStyle }}" title="Evidențiază investigațiile care implică iradiere">⚠ Sarcină</button>
         </div>
+        <sc-if value="{{ pregnancy }}">
+          <div data-noprint style="display:flex;align-items:flex-start;gap:9px;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:oklch(0.5 0.12 20 / .1);border:1px solid oklch(0.6 0.12 20 / .3)">
+            <span style="font-size:15px;line-height:1.3;flex:0 0 auto">⚠</span>
+            <span style="font-size:12.5px;line-height:1.55;color:var(--text);opacity:.9">Mod sarcină: investigațiile care implică radiații ionizante sunt marcate. Preferă alternativele fără iradiere când sunt adecvate clinic; decizia finală ține cont de raportul risc/beneficiu.</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showFreeNudge }}">
+          <div data-noprint style="display:flex;align-items:center;gap:9px;margin:0 0 16px;padding:11px 14px;border-radius:12px;background:oklch(0.55 0.11 155 / .12);border:1px solid oklch(0.6 0.12 155 / .32)">
+            <span style="font-size:14px;flex:0 0 auto">◇</span>
+            <span style="font-size:12.5px;line-height:1.5;color:var(--text);opacity:.92">Există o alternativă fără iradiere: <strong style="font-weight:600">{{ freeNudgeExam }}</strong></span>
+          </div>
+        </sc-if>
         <div style="display:flex;flex-direction:column;gap:13px">
           <sc-for list="{{ recsVM }}" as="r" hint-placeholder-count="3">
             <div data-rec style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:17px 17px 16px;position:relative;overflow:hidden">
               <div style="position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:3px;background:{{ r.barColor }}"></div>
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="{{ r.chipStyle }}">{{ r.tipShort }}</span><span style="font:600 16px 'Space Grotesk',sans-serif">{{ r.exam }}</span></div>
-                <sc-if value="{{ r.hasGrade }}"><span style="font:700 10px 'IBM Plex Mono',monospace;border:1px solid var(--border);color:var(--muted);padding:5px 8px;border-radius:7px;white-space:nowrap" title="Grad de recomandare">GRAD {{ r.grade }}</span></sc-if>
+                <sc-if value="{{ r.hasGrade }}"><span style="font:700 10px 'IBM Plex Mono',monospace;border:1px solid var(--border);color:var(--muted);padding:5px 8px;border-radius:7px;white-space:nowrap" title="{{ r.gradeTitle }}">GRAD {{ r.grade }}</span></sc-if>
               </div>
               <div style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;{{ r.badgeStyle }}">{{ r.indIcon }} {{ r.indication }}</div>
-              <sc-if value="{{ r.hasGrade }}"><div style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:9px">{{ r.gradeLine }}</div></sc-if>
-              <sc-if value="{{ r.hasComments }}"><p style="font-size:13.5px;line-height:1.6;color:var(--text);opacity:.86;margin:13px 0 0;white-space:pre-line">{{ r.comments }}</p></sc-if>
+                            <sc-if value="{{ r.hasComments }}"><p style="font-size:13.5px;line-height:1.6;color:var(--text);opacity:.86;margin:13px 0 0;white-space:pre-line">{{ r.comments }}</p></sc-if>
               <sc-if value="{{ r.hasOther }}"><div style="margin-top:12px;background:var(--surface-2);border-radius:11px;padding:11px 13px"><div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--faint);margin-bottom:5px">ALTE INFORMAȚII</div><p style="font-size:12.5px;line-height:1.55;color:var(--muted);margin:0;white-space:pre-line">{{ r.otherInfo }}</p></div></sc-if>
               <sc-if value="{{ r.hasDose }}">
               <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--border)">
@@ -247,10 +259,11 @@
                 <span style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.03em;white-space:nowrap;color:{{ r.doseColor }}">{{ r.doseLabel }}</span>
               </div>
               </sc-if>
+              <sc-if value="{{ r.pregWarn }}"><div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 11px;border-radius:9px;background:oklch(0.5 0.12 20 / .14);border:1px solid oklch(0.6 0.12 20 / .34);color:oklch(0.72 0.15 20);font:600 11px 'IBM Plex Mono',monospace">⚠ IMPLICĂ IRADIERE</div></sc-if>
             </div>
           </sc-for>
         </div>
-        <div data-printonly style="display:none;margin-top:20px;padding-top:10px;border-top:1px solid #000;font:500 10px/1.55 'IBM Plex Mono',monospace;color:#333">IRIS — ghid digital de indicații radioimagistice, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
+        <div data-printonly style="display:none;margin-top:20px;padding-top:10px;border-top:1px solid #000;font:500 10px/1.55 'IBM Plex Mono',monospace;color:#333">IRIS — Indicații radioimagistice structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
       </div>
       </sc-if>
 
@@ -291,6 +304,14 @@
     </sc-if>
 
     <!-- ===== INSTALL PROMPT (Android/Chrome) ===== -->
+    <sc-if value="{{ updateReady }}">
+      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.3);max-width:440px;margin:0 auto">
+        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">↻</div>
+        <div style="flex:1;min-width:0"><div style="font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Actualizare disponibilă</div><div style="font-size:11.5px;color:var(--faint);margin-top:2px">O versiune nouă a aplicației e pregătită.</div></div>
+        <button onClick="{{ applyUpdate }}" style="background:var(--accent);color:var(--accent-ink);border:none;border-radius:10px;padding:9px 14px;font:600 12.5px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap">Reîncarcă</button>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ installReady }}">
       <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;box-shadow:var(--shadow);padding:14px 15px;display:flex;align-items:center;gap:13px;max-width:520px;margin:0 auto">
         <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">⤓</div>
@@ -314,7 +335,7 @@
       <div data-noprint onClick="{{ closeLegend }}" style="position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))" style-hover="">
         <div onClick="{{ stop }}" style="width:100%;max-width:540px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Legendă</h3><button onClick="{{ closeLegend }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
-          <div style="overflow:auto;padding:18px 22px 24px">
+          <div style="overflow-x:hidden;overflow-y:auto;padding:18px 22px 24px">
 
           <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 10px">RECOMANDARE</div>
           <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
@@ -323,7 +344,7 @@
 
           <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">DOZĂ DE IRADIERE</div>
           <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
-            <sc-for list="{{ legendDose }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:11px"><div style="display:flex;gap:3px;width:100px">{{ d.segsEl }}</div><span style="font:600 12px 'Space Grotesk',sans-serif;color:{{ d.color }};width:96px">{{ d.band }}</span><span style="font-size:12px;color:var(--muted);white-space:nowrap">{{ d.est }}</span></div></sc-for>
+            <sc-for list="{{ legendDose }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="display:flex;gap:3px;width:97px;flex:0 0 auto">{{ d.segsEl }}</div><span style="font:600 12px 'Space Grotesk',sans-serif;color:{{ d.color }};flex:0 0 auto">{{ d.band }}</span><span style="font-size:12px;color:var(--muted)">{{ d.est }}</span></div></sc-for>
           </div>
 
           <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">TIP INVESTIGAȚIE</div>
@@ -344,10 +365,10 @@
           <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Despre IRIS</h3><button onClick="{{ closeAbout }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
           <div style="overflow:auto;padding:18px 22px 24px">
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 8px">DESPRE GHID</div>
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 8px">DESPRE GHIDUL OFICIAL</div>
           <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 8px">UTILIZARE INTENȚIONATĂ</div>
+          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 8px">CUI SE ADRESEAZĂ</div>
           <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
 
           <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">SURSĂ</div>
@@ -360,7 +381,7 @@
           <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:20px 0 10px">APLICAȚIE</div>
           <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px">
             <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Mentenanță</span><span>Dr. Costin Stroie</span></div>
-            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Contact</span><a href="/cdn-cgi/l/email-protection#e6858995928f88959294898f83a683948f8293c88393c8899481" style="color:var(--accent);text-decoration:none"><span class="__cf_email__" data-cfemail="0d6e627e7964637e797f6264684d687f64697823687823627f6a">[email&#160;protected]</span></a></div>
+            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Contact</span><a href="/cdn-cgi/l/email-protection#bdded2cec9d4d3cec9cfd2d4d8fdd8cfd4d9c893d8c893d2cfda" style="color:var(--accent);text-decoration:none"><span class="__cf_email__" data-cfemail="8be8e4f8ffe2e5f8fff9e4e2eecbeef9e2effea5eefea5e4f9ec">[email&#160;protected]</span></a></div>
             <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Licență</span><span>GPL-3.0</span></div>
           </div>
           <a href="{{ repoUrl }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px 15px;text-decoration:none;color:inherit" style-hover="border-color:var(--accent-border)">
@@ -378,10 +399,15 @@
 </x-dc>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:880},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;,&quot;options&quot;:[&quot;oklch(0.86 0.2 128)&quot;,&quot;oklch(0.78 0.16 200)&quot;,&quot;oklch(0.8 0.17 85)&quot;,&quot;oklch(0.72 0.17 25)&quot;]},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dark&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;}}">
 class Component extends DCLogic {
-  state = { view:'home', theme:'dark', chapterId:null, subId:null, sitId:null, query:'', results:[], favs:[], recent:[], access:{}, toast:'', legendOpen:false, aboutOpen:false, aiBusy:false, aiNote:'' };
+  state = { view:'home', theme:'dark', chapterId:null, subId:null, sitId:null, query:'', results:[], favs:[], recent:[], access:{}, toast:'', legendOpen:false, aboutOpen:false, aiBusy:false, aiNote:'', updateReady:false, pregnancy:false };
 
   // ---------- lifecycle ----------
-  componentDidMount(){ this._tries=0; this.initData(); this.initInstall(); this.initHistory(); }
+  componentDidMount(){ this._tries=0; this.initData(); this.initInstall(); this.initHistory(); this.initUpdate(); }
+  initUpdate(){
+    this._upd=()=>this.setState({updateReady:true});
+    window.addEventListener('iris-update-ready', this._upd);
+  }
+  applyUpdate=()=>{ try{ location.reload(); }catch(e){} };
   initInstall(){
     // already installed (standalone display) → never prompt
     const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone===true;
@@ -437,7 +463,7 @@ class Component extends DCLogic {
     this._key=(e)=>{ if(e.key==='/' && !/input|textarea/i.test(e.target.tagName)){ e.preventDefault(); this.goSearch(); } };
     window.addEventListener('keydown',this._key);
   }
-  componentWillUnmount(){ window.removeEventListener('keydown',this._key); if(this._bip)window.removeEventListener('beforeinstallprompt',this._bip); if(this._installed)window.removeEventListener('appinstalled',this._installed); if(this._pop)window.removeEventListener('popstate',this._pop); }
+  componentWillUnmount(){ window.removeEventListener('keydown',this._key); if(this._bip)window.removeEventListener('beforeinstallprompt',this._bip); if(this._installed)window.removeEventListener('appinstalled',this._installed); if(this._pop)window.removeEventListener('popstate',this._pop); if(this._upd)window.removeEventListener('iris-update-ready',this._upd); }
   componentDidUpdate(){ this.applyRoot(); }
   applyRoot(){ if(this.root){ this.root.setAttribute('data-theme', this.state.theme); const a=this.props.accent; if(a) this.root.style.setProperty('--accent', a); } }
 
@@ -485,9 +511,9 @@ class Component extends DCLogic {
     const band=this.BANDS[lvl]||'';
     let label;
     if(lvl===0) label='FĂRĂ IRADIERE';
-    else if(mn!==lvl && this.BANDS[mn]) label=`DOZĂ DE IRADIERE ${this.BANDS[mn].toUpperCase()}–${band.toUpperCase()}`;
-    else label=`DOZĂ DE IRADIERE ${band.toUpperCase()}`;
-    return {hasDose:true, segs:this.doseSegs(lvl), color:this.doseTextColor(lvl), label};
+    else if(mn!==lvl && this.BANDS[mn]) label=`IRADIERE ${this.BANDS[mn].toUpperCase()}–${band.toUpperCase()}`;
+    else label=`IRADIERE ${band.toUpperCase()}`;
+    return {hasDose:true, level:lvl, segs:this.doseSegs(lvl), color:this.doseTextColor(lvl), label};
   }
   bestRec(recs){ // most-indicated (lowest tier)
     const tier=r=>{const v=this.D.legend.indication&&this.D.legend.indication.values[r.indication]; return v?(v.tier||9):9;};
@@ -592,12 +618,13 @@ class Component extends DCLogic {
   }
 
   // ---------- favorites / share / print ----------
+  togglePregnancy=()=>{ this.setState(s=>({pregnancy:!s.pregnancy})); };
   toggleFav=()=>{ const id=this.state.sitId; const favs=this.state.favs.includes(id)?this.state.favs.filter(x=>x!==id):[...this.state.favs,id]; this.setState({favs, toast: this.state.favs.includes(id)?'Eliminat din salvate':'Salvat ★'}); try{localStorage.setItem('iris.favs',JSON.stringify(favs));}catch(e){} clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800); };
   doPrint=()=>{ const prev=this.state.theme; const run=()=>{ try{window.print();}catch(e){} if(this.state.theme!==prev) this.setState({theme:prev}); }; if(prev!=='light'){ this.setState({theme:'light'}); setTimeout(run,140); } else { run(); } };
   doShare=async ()=>{
     const s=this.sitById.get(this.state.sitId); if(!s) return;
     const recs=this.recsBySit.get(s.id)||[];
-    const text=`${s.name}\n\n`+recs.map(r=>`• ${r.exam} — ${r.indication}${r.grade?` (grad ${r.grade})`:''}`).join('\n')+`\n\n— Iris · Ghid indicații radioimagistice`;
+    const text=`${s.name}\n\n`+recs.map(r=>`• ${r.exam} — ${r.indication}${r.grade?` (grad ${r.grade})`:''}`).join('\n')+`\n\n— IRIS · Indicații radioimagistice structurate`;
     try{ if(navigator.share){ await navigator.share({title:'Iris — '+s.name, text}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
     try{ await navigator.clipboard.writeText(text); this.setState({toast:'Copiat în clipboard'}); }catch(e){ this.setState({toast:'Nu s-a putut copia'}); }
     clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800);
@@ -629,6 +656,7 @@ class Component extends DCLogic {
       repoUrl:'https://github.com/cstroie/iris',
       toast:this.state.toast,
       installReady:this.state.installReady, iosInstall:this.state.iosInstall, doInstall:this.doInstall, dismissInstall:this.dismissInstall,
+      updateReady:this.state.updateReady, applyUpdate:this.applyUpdate,
       navHomeStyle:navStyle(v==='home'), navSearchStyle:navStyle(v==='search'), navFavStyle:navStyle(v==='favs'),
       favBadge: this.state.favs.length?` ·${this.state.favs.length}`:'',
       countSituations:(D.meta&&D.meta.counts.situations)||this.index?this.index.length:0,
@@ -716,13 +744,26 @@ class Component extends DCLogic {
       vals.favBtnStyle=`display:inline-flex;align-items:center;gap:7px;border:1px solid ${fav?'var(--accent-border)':'var(--border)'};background:${fav?'var(--accent-dim)':'var(--surface)'};color:${fav?'var(--accent)':'var(--muted)'};border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer`;
       vals.toggleFav=this.toggleFav; vals.doShare=this.doShare; vals.doPrint=this.doPrint;
       const recs=this.recsBySit.get(this.state.sitId)||[];
+      const preg=this.state.pregnancy;
+      vals.pregnancy=preg; vals.togglePregnancy=this.togglePregnancy;
+      vals.pregBtnStyle=`display:inline-flex;align-items:center;gap:7px;border:1px solid ${preg?'oklch(0.7 0.12 20 / .5)':'var(--border)'};background:${preg?'oklch(0.5 0.12 20 / .16)':'var(--surface)'};color:${preg?'oklch(0.72 0.15 20)':'var(--muted)'};border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap`;
+      // radiation-free nudge: best is irradiating, but a well-indicated non-irradiating option exists
+      const tierOf=r=>{const v=this.D.legend.indication&&this.D.legend.indication.values[r.indication]; return v?(v.tier||9):9;};
+      const best=this.bestRec(recs);
+      const bestDose=best?this.doseInfo(best):{hasDose:false};
+      const altFree=recs.find(r=>r!==best && tierOf(r)<=2 && this.doseInfo(r).level===0);
+      vals.showFreeNudge = !!(best && bestDose.hasDose && bestDose.level>0 && altFree);
+      vals.freeNudgeExam = altFree?altFree.exam:'';
       vals.recsVM=recs.map(r=>{
         const dose=this.doseInfo(r);
+        const irradiating = dose.hasDose && dose.level>0;
         return {
+          pregWarn: preg && irradiating,
+          pregSafe: preg && dose.hasDose && dose.level===0,
           tipShort:this.tipShort(r.tip), chipStyle:this.chipStyle(r.tip),
           exam:r.exam, indication:r.indication||'—', indIcon:this.indIcon(r.indication),
           badgeStyle:this.badgeStyle(r.indication), barColor:this.badgeBar(r.indication),
-          hasGrade:!!r.grade, grade:r.grade, gradeLine: r.grade?`Grad ${r.grade} — ${this.GRADE[r.grade]||''}`:'',
+          hasGrade:!!r.grade, grade:r.grade, gradeTitle: r.grade?`Grad ${r.grade} — ${this.GRADE[r.grade]||''}`:'',
           hasComments:!!r.comments, comments:r.comments,
           hasOther:!!r.otherInfo, otherInfo:r.otherInfo,
           hasDose:dose.hasDose, doseSegs:dose.segs||[], doseColor:dose.color||'var(--muted)', doseLabel:dose.label||''
