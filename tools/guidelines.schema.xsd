@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           elementFormDefault="qualified">
+
+  <xs:annotation>
+    <xs:documentation>
+      Schema pentru guidelines.xml — Ghid radioimagistic.
+      Structura ierarhică: Capitole → Subcapitole → Situații clinice → Recomandări.
+      Corespunde 1:1 cu guidelines.schema.json (schemaVersion 1).
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:element name="guidelines">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="chapter" type="chapterType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="chapterType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="subchapters">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="subchapter" type="subchapterType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="subchapterType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="situations">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="situation" type="situationType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="situationType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="recommendations">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="recommendation" type="recommendationType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="placeholder" type="xs:boolean" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="recommendationType">
+    <xs:sequence>
+      <xs:element name="tip" type="xs:string"/>
+      <xs:element name="exam" type="xs:string"/>
+      <xs:element name="indication" type="xs:string"/>
+      <xs:element name="grade" type="xs:string"/>
+      <xs:element name="comments" type="xs:string"/>
+      <xs:element name="otherInfo" type="xs:string"/>
+      <xs:element name="doseMin" type="xs:decimal" nillable="true"/>
+      <xs:element name="doseMax" type="xs:decimal" nillable="true"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="nr" type="xs:integer" use="optional"/>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON → XML · Ghid radioimagistic</title>
+<style>
+  :root{ color-scheme: light dark; }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0e1116;color:#e6e9ef;padding:32px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  p.sub{color:#9aa4b2;margin:0 0 24px}
+  .drop{border:2px dashed #2b3444;border-radius:14px;padding:40px;text-align:center;background:#151a22;cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:#5b8cff;background:#161d2b}
+  .drop input{display:none}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:#5b8cff;color:#0b0f16;border:0;border-radius:10px;padding:11px 18px;font-weight:650;font-size:14px;cursor:pointer;margin-top:16px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .log{margin-top:20px;background:#0a0d12;border:1px solid #1e2530;border-radius:12px;padding:16px;font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;color:#b7c0cf;max-height:340px;overflow:auto}
+  .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .files a{background:#1a2130;border:1px solid #2b3444;color:#cdd6e4;text-decoration:none;padding:8px 12px;border-radius:9px;font-size:13px}
+  .files a:hover{border-color:#5b8cff}
+  code{background:#1a2130;padding:1px 6px;border-radius:5px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Convertor JSON → XML</h1>
+  <p class="sub">Încarcă <code>guidelines.json</code> (structura ierarhică Capitole → Subcapitole → Situații → Recomandări) și generează un XML valid, cu aceleași date, pentru schimb de date.</p>
+  <label class="drop" id="drop">
+    <div>📄 Trage fișierul guidelines.json aici sau <b>click pentru a selecta</b></div>
+    <input type="file" id="file" accept=".json,application/json">
+  </label>
+  <button class="btn" id="dl" disabled>⬇ Descarcă XML</button>
+  <div class="files" id="files"></div>
+  <div class="log" id="log">Aștept fișier…</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const logEl=$('#log'); let out=null;
+function log(m){logEl.textContent+='\n'+m; logEl.scrollTop=logEl.scrollHeight;}
+function reset(){logEl.textContent='';}
+
+function esc(v){
+  const s=(v===null||v===undefined)?'':String(v);
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+function attr(name,v){
+  return (v===null||v===undefined)?'':' '+name+'="'+esc(v)+'"';
+}
+function el(name,v){
+  const s=(v===null||v===undefined)?'':String(v);
+  return '<'+name+'>'+esc(s)+'</'+name+'>';
+}
+
+function recToXML(rec,indent){
+  const i=indent,i2=indent+'  ';
+  let s=i+'<recommendation'+attr('id',rec.id)+attr('nr',rec.nr)+'>\n';
+  s+=i2+el('tip',rec.tip)+'\n';
+  s+=i2+el('exam',rec.exam)+'\n';
+  s+=i2+el('indication',rec.indication)+'\n';
+  s+=i2+el('grade',rec.grade)+'\n';
+  s+=i2+el('comments',rec.comments)+'\n';
+  s+=i2+el('otherInfo',rec.otherInfo)+'\n';
+  s+=i2+'<doseMin'+(rec.doseMin===null||rec.doseMin===undefined?' xsi:nil="true"':'')+'>'+(rec.doseMin===null||rec.doseMin===undefined?'':esc(rec.doseMin))+'</doseMin>\n';
+  s+=i2+'<doseMax'+(rec.doseMax===null||rec.doseMax===undefined?' xsi:nil="true"':'')+'>'+(rec.doseMax===null||rec.doseMax===undefined?'':esc(rec.doseMax))+'</doseMax>\n';
+  s+=i+'</recommendation>\n';
+  return s;
+}
+function situationToXML(st,indent){
+  const i=indent,i2=indent+'  ';
+  let s=i+'<situation'+attr('id',st.id)+attr('placeholder',st.placeholder)+'>\n';
+  s+=i2+el('name',st.name)+'\n';
+  s+=i2+'<recommendations>\n';
+  (st.recommendations||[]).forEach(r=>s+=recToXML(r,i2+'  '));
+  s+=i2+'</recommendations>\n';
+  s+=i+'</situation>\n';
+  return s;
+}
+function subchapterToXML(sb,indent){
+  const i=indent,i2=indent+'  ';
+  let s=i+'<subchapter'+attr('id',sb.id)+attr('count',sb.count)+'>\n';
+  s+=i2+el('name',sb.name)+'\n';
+  s+=i2+'<situations>\n';
+  (sb.situations||[]).forEach(st=>s+=situationToXML(st,i2+'  '));
+  s+=i2+'</situations>\n';
+  s+=i+'</subchapter>\n';
+  return s;
+}
+function chapterToXML(ch,indent){
+  const i=indent,i2=indent+'  ';
+  let s=i+'<chapter'+attr('id',ch.id)+attr('count',ch.count)+'>\n';
+  s+=i2+el('name',ch.name)+'\n';
+  s+=i2+'<subchapters>\n';
+  (ch.subchapters||[]).forEach(sb=>s+=subchapterToXML(sb,i2+'  '));
+  s+=i2+'</subchapters>\n';
+  s+=i+'</chapter>\n';
+  return s;
+}
+
+function convert(json){
+  const guidelines=Array.isArray(json)?json:json.chapters||json['guidelines.json']||json;
+  if(!Array.isArray(guidelines)) throw new Error('Format neașteptat: se aștepta o listă de capitole');
+  let nCh=0,nSb=0,nSt=0,nRec=0;
+  guidelines.forEach(ch=>{
+    nCh++;
+    (ch.subchapters||[]).forEach(sb=>{
+      nSb++;
+      (sb.situations||[]).forEach(st=>{
+        nSt++;
+        nRec+=(st.recommendations||[]).length;
+      });
+    });
+  });
+  let xml='<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml+='<guidelines xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n';
+  guidelines.forEach(ch=>xml+=chapterToXML(ch,'  '));
+  xml+='</guidelines>\n';
+  log('✓ '+nRec+' recomandări procesate');
+  log('  Capitole: '+nCh+'  ·  Subcapitole: '+nSb+'  ·  Situații: '+nSt);
+  return xml;
+}
+
+function validate(xml){
+  const parser=new DOMParser();
+  const doc=parser.parseFromString(xml,'application/xml');
+  const err=doc.querySelector('parsererror');
+  if(err) throw new Error('XML invalid: '+err.textContent.slice(0,200));
+}
+
+function handle(file){
+  reset(); log('Citesc '+file.name+' …');
+  const fr=new FileReader();
+  fr.onload=()=>{
+    try{
+      const json=JSON.parse(fr.result);
+      out=convert(json);
+      validate(out);
+      showFile();
+      $('#dl').disabled=false;
+      log('\nGata. Apasă „Descarcă".');
+    }catch(e){ log('✗ Eroare: '+e.message); }
+  };
+  fr.readAsText(file,'utf-8');
+}
+function showFile(){
+  const box=$('#files'); box.innerHTML='';
+  const blob=new Blob([out],{type:'application/xml;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='guidelines.xml'; a.textContent='⬇ guidelines.xml'; box.appendChild(a);
+}
+$('#dl').onclick=()=>{
+  if(!out)return;
+  const blob=new Blob([out],{type:'application/xml;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='guidelines.xml'; a.click();
+};
+const drop=$('#drop'),input=$('#file');
+input.onchange=e=>{ if(e.target.files[0])handle(e.target.files[0]); };
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f)handle(f); });
+</script>
+</body>
+</html>

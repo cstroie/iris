@@ -33,6 +33,15 @@ Recomandările au fost mutate pe situația canonică, iar duplicatul a fost elim
 - Capitolul Cancer avea două subcapitole „Ficat, colecist și pancreas" (unul cu 1 situație, unul cu 7) — fuzionate într-unul singur. Subcapitole 93 → 92. (Subcapitolul omonim din capitolul Aparat digestiv este distinct și rămâne separat.)
 - După fuziune, situația „Colangiocarcinom și cancerul veziculei biliare – Diagnostic" apărea în ambele subcapitole Ficat → fuzionată. Situații 696 → 695.
 
+## 2026-07 — corecții typo-uri ortografice
+
+Greșeli de tastare corectate în titluri, comentarii și denumiri de examene:
+- „penntru" → „pentru"
+- „anevrsim" → „anevrism"
+- „Hirschprung" → „Hirschsprung"
+- „radiațiii" → „radiații"
+- „paratitoide" → „paratiroide"
+
 ## 2026-07 — cratime și liniuțe în titluri
 
 ### Cuvinte compuse cu spațiu greșit (spațiul eliminat)

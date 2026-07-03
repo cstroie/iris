@@ -37,97 +37,69 @@ if('serviceWorker' in navigator){
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="data/iris-data.js"></script>
-<style>
-  *{box-sizing:border-box}
-  html,body{margin:0}
-  body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-  [data-theme]{
-    --bg:#0b0d10; --surface:#15181e; --surface-2:#1b1f26; --border:#242932;
-    --text:#eef1f5; --muted:#8b93a2; --faint:#5f6774;
-    --accent:oklch(0.86 0.2 128); --accent-ink:#0c1206; --accent-dim:#15230f; --accent-border:#243d18;
-    --dose-empty:#2a303a; --shadow:0 22px 55px -34px rgba(0,0,0,.75); --overlay:rgba(6,8,11,.74);
-  }
-  [data-theme="light"]{
-    --bg:#f3f4f0; --surface:#ffffff; --surface-2:#eceee9; --border:#e0e2dc;
-    --text:#14171c; --muted:#545d6e; --faint:#767e8c;
-    --accent:oklch(0.66 0.19 131); --accent-ink:#0c1206; --accent-dim:#eef6da; --accent-border:#cde29e;
-    --dose-empty:#dde1d8; --shadow:0 18px 44px -30px rgba(40,50,20,.26); --overlay:rgba(20,23,28,.42);
-  }
-  ::-webkit-scrollbar{width:9px;height:9px}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
-  input{font-family:inherit}
-  @keyframes irisspin{to{transform:rotate(360deg)}}
-  @keyframes irisfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @keyframes irispop{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
-  @media print{
-    [data-theme]{--bg:#fff;--surface:#fff;--surface-2:#fff;--text:#000;--muted:#333;--faint:#555;--border:#bbb;--shadow:none;--dose-empty:#ddd}
-    [data-noprint]{display:none!important}
-    [data-printonly]{display:block!important}
-    [data-rec]{break-inside:avoid;border:1px solid #999!important;box-shadow:none!important}
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </helmet>
 
 <template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#0b0d10"/><circle cx="50" cy="50" r="20" fill="none" stroke="#b6f000" stroke-width="4"/><circle cx="50" cy="50" r="6" fill="#b6f000"/></svg></template>
-<div data-theme="dark" ref="{{ rootRef }}" style="min-height:100vh;background:var(--bg);color:var(--text)">
-  <div style="max-width:100%;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative">
+<div data-theme="dark" ref="{{ rootRef }}" class="app-root">
+  <div class="app-shell">
 
     <!-- ===== HEADER ===== -->
-    <header data-noprint style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:color-mix(in srgb, var(--bg) 82%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)">
-      <div role="button" onClick="{{ goHome }}" style="display:flex;align-items:center;gap:11px;cursor:pointer">
-        <div style="width:32px;height:32px;border-radius:50%;border:2.5px solid var(--accent);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span></div>
-        <div style="display:flex;flex-direction:column;line-height:1"><span style="font:700 19px 'Space Grotesk',sans-serif;letter-spacing:.13em">IRIS</span><span style="font:500 8.5px 'IBM Plex Mono',monospace;color:var(--faint);letter-spacing:.1em;margin-top:3px">INDICAȚII RADIOIMAGISTICE STRUCTURATE</span></div>
+    <header data-noprint class="app-header">
+      <div role="button" onClick="{{ goHome }}" class="brand">
+        <div class="brand-mark"><span class="brand-dot"></span></div>
+        <div class="brand-text"><span class="brand-name">IRIS</span><span class="brand-sub">INDICAȚII RADIOIMAGISTICE STRUCTURATE</span></div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <button onClick="{{ openLegend }}" title="Legendă" style="width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:15px;cursor:pointer">ⓘ</button>
-        <button onClick="{{ toggleTheme }}" title="Temă" style="width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:15px;cursor:pointer">{{ themeIcon }}</button>
+      <div class="header-actions">
+        <button onClick="{{ openLegend }}" title="Legendă" class="icon-btn">ⓘ</button>
+        <button onClick="{{ toggleTheme }}" title="Temă" class="icon-btn">{{ themeIcon }}</button>
       </div>
     </header>
 
-    <main style="flex:1;padding:0 20px 48px">
+    <main class="app-main">
 
       <!-- ============ HOME ============ -->
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-      <div style="">
-        <div style="padding:34px 4px 22px">
-          <h1 style="font:700 34px/1.12 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;max-width:640px">{{ heroTitle }}</h1>
-          <p style="font-size:15px;line-height:1.6;color:var(--muted);margin:0;max-width:520px">Ghid de indicații radioimagistice — {{ countSituations }} situații clinice, {{ countRecs }} recomandări. Caută un simptom sau răsfoiește pe capitole.</p>
+      <div>
+        <div class="hero">
+          <h1 class="hero-title">{{ heroTitle }}</h1>
+          <p class="hero-sub">Ghid de indicații radioimagistice — {{ countSituations }} situații clinice, {{ countRecs }} recomandări. Caută un simptom sau răsfoiește pe capitole.</p>
         </div>
-        <div role="button" onClick="{{ goSearch }}" style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 17px;cursor:text;box-shadow:var(--shadow)">
-          <span style="color:var(--accent);font-size:18px">⌕</span>
-          <span style="font-size:15px;color:var(--faint)">Caută simptom, examen sau fragment de cuvânt…</span>
-          <span style="margin-left:auto;font:600 10px 'IBM Plex Mono',monospace;background:var(--surface-2);border:1px solid var(--border);color:var(--faint);padding:4px 7px;border-radius:6px">/</span>
+        <div role="button" onClick="{{ goSearch }}" class="search-trigger">
+          <span class="accent-icon">⌕</span>
+          <span class="search-trigger-text">Caută simptom, examen sau fragment de cuvânt…</span>
+          <span class="kbd">/</span>
         </div>
-        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin:20px 4px 10px">ÎNCEARCĂ</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="try-label">ÎNCEARCĂ</div>
+        <div class="chip-row">
           <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="5">
             <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
           </sc-for>
         </div>
 
         <sc-if value="{{ hasRecent }}">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin:32px 4px 12px">
-            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">VIZUALIZATE RECENT</span>
-            <button onClick="{{ clearRecent }}" style="border:0;background:transparent;color:var(--faint);font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.08em;cursor:pointer" style-hover="color:var(--text)">ȘTERGE</button>
+          <div class="recent-head">
+            <span class="eyebrow">VIZUALIZATE RECENT</span>
+            <button onClick="{{ clearRecent }}" class="link-btn">ȘTERGE</button>
           </div>
-          <div style="display:flex;gap:10px;overflow-x:auto;margin:0 -20px;padding:2px 20px 8px">
+          <div class="recent-rail">
             <sc-for list="{{ recentVM }}" as="q" hint-placeholder-count="3">
-              <div role="button" onClick="{{ q.onOpen }}" style="flex:0 0 232px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;cursor:pointer;display:flex;flex-direction:column" style-hover="border-color:var(--accent-border)">
-                <div style="font:500 9.5px 'IBM Plex Mono',monospace;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.crumb }}</div>
-                <div style="font:600 14px/1.32 'Space Grotesk',sans-serif;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px">{{ q.name }}</div>
-                <div style="margin-top:10px"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span></div>
+              <div role="button" onClick="{{ q.onOpen }}" class="recent-card">
+                <div class="recent-crumb">{{ q.crumb }}</div>
+                <div class="recent-name">{{ q.name }}</div>
+                <div class="mt10"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span></div>
               </div>
             </sc-for>
           </div>
         </sc-if>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin:34px 4px 14px">
-          <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">RĂSFOIEȘTE · {{ countChapters }} CAPITOLE</span>
+        <div class="browse-head">
+          <span class="eyebrow">RĂSFOIEȘTE · {{ countChapters }} CAPITOLE</span>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px">
+        <div class="chapters-grid">
           <sc-for list="{{ chaptersVM }}" as="ch" hint-placeholder-count="8">
             <div role="button" onClick="{{ ch.onOpen }}" style="background:{{ ch.cardBg }};border:1px solid {{ ch.cardBorder }};border-radius:16px;padding:15px 15px 14px;cursor:pointer;display:flex;flex-direction:column;min-height:104px;transition:transform .12s" style-hover="transform:translateY(-2px)">
               <span style="font:700 16px/1.15 'Space Grotesk',sans-serif;color:{{ ch.nameColor }}">{{ ch.name }}</span>
-              <div style="display:flex;gap:4px;margin-top:10px">
+              <div class="dots-row">
                 <sc-for list="{{ ch.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for>
               </div>
               <span style="font:500 10.5px 'IBM Plex Mono',monospace;color:{{ ch.metaColor }};margin-top:auto;padding-top:10px">{{ ch.meta }}</span>
@@ -135,66 +107,66 @@ if('serviceWorker' in navigator){
           </sc-for>
         </div>
 
-        <footer style="margin:40px 4px 0;padding-top:20px;border-top:1px solid var(--border)">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 12px">
-            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)">SURSĂ & INFORMAȚII</span>
+        <footer class="home-footer">
+          <div class="source-head">
+            <span class="eyebrow">SURSĂ & INFORMAȚII</span>
           </div>
-          <p style="font-size:12.5px;line-height:1.6;color:var(--faint);margin:0 0 12px;max-width:560px">Conținut adaptat după <span style="color:var(--muted)">Ghidul de utilizare a investigațiilor radiologice și imagistice medicale</span> — Ministerul Sănătății. Instrument de suport decizional; nu înlocuiește judecata clinică.</p>
-          <div style="display:flex;justify-content:center;margin-top:2px"><button onClick="{{ openAbout }}" style="border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 12.5px 'Space Grotesk',sans-serif;cursor:pointer" style-hover="border-color:var(--accent-border);color:var(--text)">Despre IRIS și sursa oficială</button></div>
+          <p class="source-note">Conținut adaptat după <span class="txt-muted">Ghidul de utilizare a investigațiilor radiologice și imagistice medicale</span> — Ministerul Sănătății. Instrument de suport decizional; nu înlocuiește judecata clinică.</p>
+          <div class="center-row"><button onClick="{{ openAbout }}" class="pill-btn">Despre IRIS și sursa oficială</button></div>
         </footer>
       </div>
       </sc-if>
       <sc-if value="{{ isSearch }}">
-      <div style=";padding-top:20px">
-        <div style="display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)">
-          <span style="color:var(--accent);font-size:18px">⌕</span>
-          <input ref="{{ inputRef }}" value="{{ query }}" onInput="{{ onInput }}" placeholder="Caută simptom, examen sau fragment de cuvânt…" style="flex:1;border:0;outline:0;background:transparent;color:var(--text);font-size:16px" />
-          <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" style="border:0;background:transparent;color:var(--faint);font-size:18px;cursor:pointer">✕</button></sc-if>
+      <div class="view-pad">
+        <div class="searchbar">
+          <span class="accent-icon">⌕</span>
+          <input ref="{{ inputRef }}" value="{{ query }}" onInput="{{ onInput }}" placeholder="Caută simptom, examen sau fragment de cuvânt…" class="search-input" />
+          <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" class="clear-btn">✕</button></sc-if>
         </div>
 
         <sc-if value="{{ aiAvailable }}">
-        <div style="display:flex;align-items:center;gap:10px;margin-top:11px">
+        <div class="ai-row">
           <button onClick="{{ onAI }}" style="{{ aiBtnStyle }}"><span style="{{ aiSpinStyle }}"></span>✨ Interpretează cu AI</button>
-          <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ aiHint }}</span>
+          <span class="mono-faint-11">{{ aiHint }}</span>
         </div>
         </sc-if>
         <sc-if value="{{ aiNote }}">
-          <div style="margin-top:11px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:12px;padding:11px 13px;font-size:13px;color:var(--text)">✨ {{ aiNote }}</div>
+          <div class="ai-note">✨ {{ aiNote }}</div>
         </sc-if>
 
         <!-- empty state -->
         <sc-if value="{{ showSearchIntro }}">
-          <div style="margin-top:26px">
-            <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--faint);margin-bottom:12px">ÎNCEARCĂ</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="mt26">
+            <div class="try-label-intro">ÎNCEARCĂ</div>
+            <div class="chip-row">
               <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
             </div>
-            <p style="margin-top:22px;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:520px">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: Iris găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
+            <p class="intro-note">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: Iris găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
           </div>
         </sc-if>
 
         <!-- results -->
         <sc-if value="{{ hasResults }}">
-          <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:22px 2px 12px">{{ resultLabel }}</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="results-label">{{ resultLabel }}</div>
+          <div class="list-col">
             <sc-for list="{{ resultsVM }}" as="r" hint-placeholder-count="5">
-              <div role="button" onClick="{{ r.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
-                <div style="font:500 10px 'IBM Plex Mono',monospace;color:var(--faint);letter-spacing:.04em;margin-bottom:6px">{{ r.crumb }}</div>
-                <div style="font:600 16px/1.25 'Space Grotesk',sans-serif;color:var(--text)">{{ r.name }}</div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:11px;flex-wrap:wrap">
+              <div role="button" onClick="{{ r.onOpen }}" class="card">
+                <div class="card-crumb">{{ r.crumb }}</div>
+                <div class="result-name">{{ r.name }}</div>
+                <div class="meta-row">
                   <span style="{{ r.bestStyle }}">{{ r.bestIcon }} {{ r.bestExam }}</span>
-                  <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ r.recMeta }}</span>
-                  <span style="margin-left:auto;display:flex;gap:4px"><sc-for list="{{ r.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
+                  <span class="mono-faint-11">{{ r.recMeta }}</span>
+                  <span class="dots-trail"><sc-for list="{{ r.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
                 </div>
               </div>
             </sc-for>
           </div>
         </sc-if>
         <sc-if value="{{ noResults }}">
-          <div style="margin-top:40px;text-align:center;color:var(--muted)">
-            <div style="font-size:30px;margin-bottom:10px;opacity:.5">⌕</div>
-            <div style="font:600 16px 'Space Grotesk',sans-serif;color:var(--text)">Niciun rezultat pentru „{{ query }}"</div>
-            <p style="font-size:13.5px;margin-top:8px">Încearcă alți termeni<sc-if value="{{ aiAvailable }}">, sau apasă „Interpretează cu AI"</sc-if>.</p>
+          <div class="empty">
+            <div class="empty-icon">⌕</div>
+            <div class="empty-title">Niciun rezultat pentru „{{ query }}"</div>
+            <p class="empty-sub">Încearcă alți termeni<sc-if value="{{ aiAvailable }}">, sau apasă „Interpretează cu AI"</sc-if>.</p>
           </div>
         </sc-if>
       </div>
@@ -202,17 +174,17 @@ if('serviceWorker' in navigator){
 
       <!-- ============ CHAPTER ============ -->
       <sc-if value="{{ isChapter }}">
-      <div style="">
-        <div data-noprint style="display:flex;align-items:center;gap:9px;padding:20px 2px 4px"><button onClick="{{ goHome }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:var(--faint);line-height:1">CAPITOL</span></div>
-        <h2 style="font:700 28px/1.1 'Space Grotesk',sans-serif;margin:8px 2px 4px;letter-spacing:-.01em">{{ curChapterName }}</h2>
-        <div style="font:500 12px 'IBM Plex Mono',monospace;color:var(--faint);margin:0 2px 20px">{{ curChapterMeta }}</div>
-        <div style="display:flex;flex-direction:column;gap:9px">
+      <div>
+        <div data-noprint class="crumbbar-9"><button onClick="{{ goHome }}" class="back-btn">‹</button><span class="crumb-static">CAPITOL</span></div>
+        <h2 class="title-ch">{{ curChapterName }}</h2>
+        <div class="view-meta">{{ curChapterMeta }}</div>
+        <div class="list-col-9">
           <sc-for list="{{ subsVM }}" as="s" hint-placeholder-count="6">
-            <div role="button" onClick="{{ s.onOpen }}" style="display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
-              <span style="font:600 12px 'IBM Plex Mono',monospace;color:var(--faint);width:24px">{{ s.num }}</span>
-              <span style="font:500 16px 'Space Grotesk',sans-serif;flex:1">{{ s.name }}</span>
-              <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ s.count }}</span>
-              <span style="color:var(--faint);font-size:16px">›</span>
+            <div role="button" onClick="{{ s.onOpen }}" class="row-card">
+              <span class="row-num">{{ s.num }}</span>
+              <span class="row-name">{{ s.name }}</span>
+              <span class="mono-faint-11">{{ s.count }}</span>
+              <span class="chev">›</span>
             </div>
           </sc-for>
         </div>
@@ -221,18 +193,18 @@ if('serviceWorker' in navigator){
 
       <!-- ============ SUBCHAPTER ============ -->
       <sc-if value="{{ isSub }}">
-      <div style="">
-        <div data-noprint style="display:flex;align-items:center;gap:8px;padding:20px 2px 4px"><button onClick="{{ backToChapter }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><div style="display:flex;align-items:center;flex-wrap:wrap;line-height:1.5"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span style="color:var(--faint);opacity:.5;margin:0 5px;font:500 11px 'IBM Plex Mono',monospace">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;color:var(--faint);cursor:pointer" style-hover="color:var(--accent)">{{ cr.label }}</span></sc-for></div></div>
-        <h2 style="font:700 26px/1.12 'Space Grotesk',sans-serif;margin:8px 2px 4px;letter-spacing:-.01em">{{ curSubName }}</h2>
-        <div style="font:500 12px 'IBM Plex Mono',monospace;color:var(--faint);margin:0 2px 20px">{{ curSubMeta }}</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
+      <div>
+        <div data-noprint class="crumbbar"><button onClick="{{ backToChapter }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+        <h2 class="title-sub">{{ curSubName }}</h2>
+        <div class="view-meta">{{ curSubMeta }}</div>
+        <div class="list-col">
           <sc-for list="{{ sitsVM }}" as="q" hint-placeholder-count="8">
-            <div role="button" onClick="{{ q.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
-              <div style="font:600 15.5px/1.3 'Space Grotesk',sans-serif">{{ q.name }}</div>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <div role="button" onClick="{{ q.onOpen }}" class="card">
+              <div class="sit-name">{{ q.name }}</div>
+              <div class="meta-row">
                 <span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span>
-                <span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ q.recMeta }}</span>
-                <span style="margin-left:auto;display:flex;gap:4px"><sc-for list="{{ q.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
+                <span class="mono-faint-11">{{ q.recMeta }}</span>
+                <span class="dots-trail"><sc-for list="{{ q.dots }}" as="d" hint-placeholder-count="3"><span style="{{ d.style }}"></span></sc-for></span>
               </div>
             </div>
           </sc-for>
@@ -242,74 +214,74 @@ if('serviceWorker' in navigator){
 
       <!-- ============ SITUATION DETAIL ============ -->
       <sc-if value="{{ isSit }}">
-      <div style="">
-        <div data-printonly style="display:none;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #000">
-          <div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 22px 'Space Grotesk',sans-serif;letter-spacing:.14em;color:#000">IRIS</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#333">Indicații radioimagistice structurate</span></div>
-          <div style="font:500 11px 'IBM Plex Mono',monospace;color:#444;margin-top:8px">{{ sitPrintCrumb }}</div>
+      <div>
+        <div data-printonly class="print-head">
+          <div class="print-brand-row"><span class="print-brand">IRIS</span><span class="print-sub">Indicații radioimagistice structurate</span></div>
+          <div class="print-crumb">{{ sitPrintCrumb }}</div>
         </div>
-        <div data-noprint style="display:flex;align-items:center;gap:8px;padding:20px 2px 4px"><button onClick="{{ backToSub }}" style="border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center">‹</button><div style="display:flex;align-items:center;flex-wrap:wrap;line-height:1.5"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span style="color:var(--faint);opacity:.5;margin:0 5px;font:500 11px 'IBM Plex Mono',monospace">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;color:var(--faint);cursor:pointer" style-hover="color:var(--accent)">{{ cr.label }}</span></sc-for></div></div>
-        <h2 style="font:700 27px/1.14 'Space Grotesk',sans-serif;margin:10px 2px 16px;letter-spacing:-.01em">{{ curSitName }}</h2>
-        <div data-noprint style="display:flex;gap:8px;margin:0 0 22px;flex-wrap:nowrap;overflow-x:auto">
+        <div data-noprint class="crumbbar"><button onClick="{{ backToSub }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+        <h2 class="title-sit">{{ curSitName }}</h2>
+        <div data-noprint class="action-row">
           <button onClick="{{ toggleFav }}" style="{{ favBtnStyle }}">{{ favIcon }} {{ favLabel }}</button>
-          <button onClick="{{ doShare }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⤴ Distribuie</button>
-          <button onClick="{{ doPrint }}" style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer">⎙ Printează</button>
+          <button onClick="{{ doShare }}" class="action-btn">⤴ Distribuie</button>
+          <button onClick="{{ doPrint }}" class="action-btn">⎙ Printează</button>
           <button onClick="{{ togglePregnancy }}" style="{{ pregBtnStyle }}" title="Evidențiază investigațiile care implică iradiere">⚠ Sarcină</button>
         </div>
         <sc-if value="{{ pregnancy }}">
-          <div data-noprint style="display:flex;align-items:flex-start;gap:9px;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:oklch(0.5 0.12 20 / .1);border:1px solid oklch(0.6 0.12 20 / .3)">
-            <span style="font-size:15px;line-height:1.3;flex:0 0 auto">⚠</span>
-            <span style="font-size:12.5px;line-height:1.55;color:var(--text);opacity:.9">Mod sarcină: investigațiile care implică radiații ionizante sunt marcate. Preferă alternativele fără iradiere când sunt adecvate clinic; decizia finală ține cont de raportul risc/beneficiu.</span>
+          <div data-noprint class="warn-banner">
+            <span class="warn-icon">⚠</span>
+            <span class="warn-text">Mod sarcină: investigațiile care implică radiații ionizante sunt marcate. Preferă alternativele fără iradiere când sunt adecvate clinic; decizia finală ține cont de raportul risc/beneficiu.</span>
           </div>
         </sc-if>
         <sc-if value="{{ showFreeNudge }}">
-          <div data-noprint style="display:flex;align-items:center;gap:9px;margin:0 0 16px;padding:11px 14px;border-radius:12px;background:oklch(0.55 0.11 155 / .12);border:1px solid oklch(0.6 0.12 155 / .32)">
-            <span style="font-size:14px;flex:0 0 auto">◇</span>
-            <span style="font-size:12.5px;line-height:1.5;color:var(--text);opacity:.92">Există o alternativă fără iradiere: <strong style="font-weight:600">{{ freeNudgeExam }}</strong></span>
+          <div data-noprint class="nudge-banner">
+            <span class="nudge-icon">◇</span>
+            <span class="nudge-text">Există o alternativă fără iradiere: <strong class="b600">{{ freeNudgeExam }}</strong></span>
           </div>
         </sc-if>
-        <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="list-col-13">
           <sc-for list="{{ recsVM }}" as="r" hint-placeholder-count="3">
-            <div data-rec style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:17px 17px 16px;position:relative;overflow:hidden">
+            <div data-rec class="rec-card">
               <div style="position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:3px;background:{{ r.barColor }}"></div>
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="{{ r.chipStyle }}">{{ r.tipShort }}</span><span style="font:600 16px 'Space Grotesk',sans-serif">{{ r.exam }}</span></div>
-                <sc-if value="{{ r.hasGrade }}"><span style="font:700 10px 'IBM Plex Mono',monospace;border:1px solid var(--border);color:var(--muted);padding:5px 8px;border-radius:7px;white-space:nowrap" title="{{ r.gradeTitle }}">GRAD {{ r.grade }}</span></sc-if>
+              <div class="rec-head">
+                <div class="rec-title-group"><span style="{{ r.chipStyle }}">{{ r.tipShort }}</span><span class="rec-exam">{{ r.exam }}</span></div>
+                <sc-if value="{{ r.hasGrade }}"><span class="grade-chip" title="{{ r.gradeTitle }}">GRAD {{ r.grade }}</span></sc-if>
               </div>
               <div style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;{{ r.badgeStyle }}">{{ r.indIcon }} {{ r.indication }}</div>
-                            <sc-if value="{{ r.hasComments }}"><p style="font-size:13.5px;line-height:1.6;color:var(--text);opacity:.86;margin:13px 0 0;white-space:pre-line">{{ r.comments }}</p></sc-if>
-              <sc-if value="{{ r.hasOther }}"><div style="margin-top:12px;background:var(--surface-2);border-radius:11px;padding:11px 13px"><div style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--faint);margin-bottom:5px">ALTE INFORMAȚII</div><p style="font-size:12.5px;line-height:1.55;color:var(--muted);margin:0;white-space:pre-line">{{ r.otherInfo }}</p></div></sc-if>
+                            <sc-if value="{{ r.hasComments }}"><p class="rec-comments">{{ r.comments }}</p></sc-if>
+              <sc-if value="{{ r.hasOther }}"><div class="rec-other"><div class="rec-other-label">ALTE INFORMAȚII</div><p class="rec-other-text">{{ r.otherInfo }}</p></div></sc-if>
               <sc-if value="{{ r.hasDose }}">
-              <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--border)">
-                <div style="display:flex;gap:3px"><sc-for list="{{ r.doseSegs }}" as="s" hint-placeholder-count="5"><span style="{{ s.style }}"></span></sc-for></div>
+              <div class="dose-row">
+                <div class="dose-segs"><sc-for list="{{ r.doseSegs }}" as="s" hint-placeholder-count="5"><span style="{{ s.style }}"></span></sc-for></div>
                 <span style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.03em;white-space:nowrap;color:{{ r.doseColor }}">{{ r.doseLabel }}</span>
               </div>
               </sc-if>
-              <sc-if value="{{ r.pregWarn }}"><div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 11px;border-radius:9px;background:oklch(0.5 0.12 20 / .14);border:1px solid oklch(0.6 0.12 20 / .34);color:oklch(0.72 0.15 20);font:600 11px 'IBM Plex Mono',monospace">⚠ IMPLICĂ IRADIERE</div></sc-if>
+              <sc-if value="{{ r.pregWarn }}"><div class="preg-warn">⚠ IMPLICĂ IRADIERE</div></sc-if>
             </div>
           </sc-for>
         </div>
-        <div data-printonly style="display:none;margin-top:20px;padding-top:10px;border-top:1px solid #000;font:500 10px/1.55 'IBM Plex Mono',monospace;color:#333">IRIS — Indicații radioimagistice structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
+        <div data-printonly class="print-foot">IRIS — Indicații radioimagistice structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
       </div>
       </sc-if>
 
       <!-- ============ FAVORITES ============ -->
       <sc-if value="{{ isFavs }}">
-      <div style="">
-        <div style="padding:22px 2px 4px"><span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--faint)">SALVATE</span></div>
-        <h2 style="font:700 26px 'Space Grotesk',sans-serif;margin:8px 2px 20px;letter-spacing:-.01em">Situații salvate</h2>
+      <div>
+        <div class="favs-head-pad"><span class="eyebrow-sm">SALVATE</span></div>
+        <h2 class="title-favs">Situații salvate</h2>
         <sc-if value="{{ hasFavs }}">
-          <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="list-col">
             <sc-for list="{{ favsVM }}" as="q" hint-placeholder-count="3">
-              <div role="button" onClick="{{ q.onOpen }}" style="background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 16px;cursor:pointer" style-hover="border-color:var(--accent-border)">
-                <div style="font:500 10px 'IBM Plex Mono',monospace;color:var(--faint);margin-bottom:6px">{{ q.crumb }}</div>
-                <div style="font:600 15.5px/1.3 'Space Grotesk',sans-serif">{{ q.name }}</div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:var(--faint)">{{ q.recMeta }}</span></div>
+              <div role="button" onClick="{{ q.onOpen }}" class="card">
+                <div class="fav-crumb">{{ q.crumb }}</div>
+                <div class="sit-name">{{ q.name }}</div>
+                <div class="fav-meta-row"><span style="{{ q.bestStyle }}">{{ q.bestIcon }} {{ q.bestExam }}</span><span class="mono-faint-11">{{ q.recMeta }}</span></div>
               </div>
             </sc-for>
           </div>
         </sc-if>
         <sc-if value="{{ noFavs }}">
-          <div style="margin-top:44px;text-align:center;color:var(--muted)"><div style="font-size:30px;opacity:.4;margin-bottom:10px">★</div><div style="font:600 16px 'Space Grotesk',sans-serif;color:var(--text)">Nicio situație salvată</div><p style="font-size:13.5px;margin-top:8px">Apasă ★ pe o situație clinică pentru a o salva aici.</p></div>
+          <div class="empty-2"><div class="empty-icon-2">★</div><div class="empty-title">Nicio situație salvată</div><p class="empty-sub">Apasă ★ pe o situație clinică pentru a o salva aici.</p></div>
         </sc-if>
       </div>
       </sc-if>
@@ -317,67 +289,67 @@ if('serviceWorker' in navigator){
     </main>
 
     <!-- ===== BOTTOM NAV ===== -->
-    <nav data-noprint style="position:sticky;bottom:0;z-index:30;display:flex;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(14px);border-top:1px solid var(--border)">
-      <button onClick="{{ goHome }}" style="{{ navHomeStyle }}"><span style="font-size:17px">⌂</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">ACASĂ</span></button>
-      <button onClick="{{ goSearch }}" style="{{ navSearchStyle }}"><span style="font-size:17px">⌕</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">CAUTĂ</span></button>
-      <button onClick="{{ goFavs }}" style="{{ navFavStyle }}"><span style="font-size:15px">★</span><span style="font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.06em">SALVATE{{ favBadge }}</span></button>
+    <nav data-noprint class="app-nav">
+      <button onClick="{{ goHome }}" style="{{ navHomeStyle }}"><span class="nav-icon-17">⌂</span><span class="nav-label">ACASĂ</span></button>
+      <button onClick="{{ goSearch }}" style="{{ navSearchStyle }}"><span class="nav-icon-17">⌕</span><span class="nav-label">CAUTĂ</span></button>
+      <button onClick="{{ goFavs }}" style="{{ navFavStyle }}"><span class="nav-icon-15">★</span><span class="nav-label">SALVATE{{ favBadge }}</span></button>
     </nav>
 
     <!-- ===== TOAST ===== -->
     <sc-if value="{{ toast }}">
-      <div data-noprint style="position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:60;background:var(--accent);color:var(--accent-ink);font:600 13px 'Space Grotesk',sans-serif;padding:11px 18px;border-radius:12px;box-shadow:var(--shadow)">{{ toast }}</div>
+      <div data-noprint class="toast">{{ toast }}</div>
     </sc-if>
 
     <!-- ===== INSTALL PROMPT (Android/Chrome) ===== -->
     <sc-if value="{{ updateReady }}">
-      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.3);max-width:440px;margin:0 auto">
-        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">↻</div>
-        <div style="flex:1;min-width:0"><div style="font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Actualizare disponibilă</div><div style="font-size:11.5px;color:var(--faint);margin-top:2px">O versiune nouă a aplicației e pregătită.</div></div>
-        <button onClick="{{ applyUpdate }}" style="background:var(--accent);color:var(--accent-ink);border:none;border-radius:10px;padding:9px 14px;font:600 12.5px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap">Reîncarcă</button>
+      <div data-noprint class="update-card">
+        <div class="snack-icon">↻</div>
+        <div class="snack-body"><div class="snack-title-135">Actualizare disponibilă</div><div class="snack-sub-faint">O versiune nouă a aplicației e pregătită.</div></div>
+        <button onClick="{{ applyUpdate }}" class="btn-accent-sm">Reîncarcă</button>
       </div>
     </sc-if>
 
     <sc-if value="{{ installReady }}">
-      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;box-shadow:var(--shadow);padding:14px 15px;display:flex;align-items:center;gap:13px;max-width:520px;margin:0 auto">
-        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">⤓</div>
-        <div style="flex:1;min-width:0"><div style="font:600 14px 'Space Grotesk',sans-serif;color:var(--text)">Instalează IRIS</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">Acces rapid, offline, ecran complet</div></div>
-        <button onClick="{{ dismissInstall }}" style="border:0;background:transparent;color:var(--faint);font-size:13px;cursor:pointer;padding:6px 4px">Nu acum</button>
-        <button onClick="{{ doInstall }}" style="border:0;background:var(--accent);color:var(--accent-ink);font:600 13px 'Space Grotesk',sans-serif;padding:9px 16px;border-radius:11px;cursor:pointer;flex:0 0 auto">Instalează</button>
+      <div data-noprint class="install-card">
+        <div class="snack-icon">⤓</div>
+        <div class="snack-body"><div class="snack-title-14">Instalează IRIS</div><div class="snack-sub-muted">Acces rapid, offline, ecran complet</div></div>
+        <button onClick="{{ dismissInstall }}" class="snack-dismiss">Nu acum</button>
+        <button onClick="{{ doInstall }}" class="btn-accent">Instalează</button>
       </div>
     </sc-if>
 
     <!-- ===== INSTALL HINT (iOS Safari) ===== -->
     <sc-if value="{{ iosInstall }}">
-      <div data-noprint style="position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;background:var(--surface);border:1px solid var(--accent-border);border-radius:16px;box-shadow:var(--shadow);padding:14px 15px;display:flex;align-items:center;gap:13px;max-width:520px;margin:0 auto">
-        <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto">⎋</div>
-        <div style="flex:1;min-width:0"><div style="font:600 14px 'Space Grotesk',sans-serif;color:var(--text)">Adaugă IRIS pe ecranul principal</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">Apasă <b style="color:var(--text)">Partajează ⎋</b> apoi <b style="color:var(--text)">Adaugă la ecranul principal</b></div></div>
-        <button onClick="{{ dismissInstall }}" style="border:0;background:transparent;color:var(--faint);font-size:16px;cursor:pointer;padding:6px 4px;flex:0 0 auto">✕</button>
+      <div data-noprint class="install-card">
+        <div class="snack-icon">⎋</div>
+        <div class="snack-body"><div class="snack-title-14">Adaugă IRIS pe ecranul principal</div><div class="snack-sub-muted">Apasă <b class="txt-strong">Partajează ⎋</b> apoi <b class="txt-strong">Adaugă la ecranul principal</b></div></div>
+        <button onClick="{{ dismissInstall }}" class="snack-close">✕</button>
       </div>
     </sc-if>
 
     <!-- ===== LEGEND OVERLAY ===== -->
     <sc-if value="{{ legendOpen }}">
-      <div data-noprint onClick="{{ closeLegend }}" style="position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))" style-hover="">
-        <div onClick="{{ stop }}" style="width:100%;max-width:540px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Legendă</h3><button onClick="{{ closeLegend }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
-          <div style="overflow-x:hidden;overflow-y:auto;padding:18px 22px 24px">
+      <div data-noprint onClick="{{ closeLegend }}" class="overlay">
+        <div onClick="{{ stop }}" class="modal">
+          <div class="modal-head"><h3 class="modal-title">Legendă</h3><button onClick="{{ closeLegend }}" class="modal-close">✕</button></div>
+          <div class="modal-body">
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 10px">RECOMANDARE</div>
-          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
-            <sc-for list="{{ legendInd }}" as="l" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:10px"><span style="{{ l.badgeStyle }}">{{ l.icon }} {{ l.name }}</span><span style="font-size:12.5px;color:var(--muted);flex:1">{{ l.desc }}</span></div></sc-for>
+          <div class="legend-label ll-first">RECOMANDARE</div>
+          <div class="legend-list">
+            <sc-for list="{{ legendInd }}" as="l" hint-placeholder-count="5"><div class="legend-ind-row"><span style="{{ l.badgeStyle }}">{{ l.icon }} {{ l.name }}</span><span class="legend-desc">{{ l.desc }}</span></div></sc-for>
           </div>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">DOZĂ DE IRADIERE</div>
-          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
-            <sc-for list="{{ legendDose }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="display:flex;gap:3px;width:97px;flex:0 0 auto">{{ d.segsEl }}</div><span style="font:600 12px 'Space Grotesk',sans-serif;color:{{ d.color }};flex:0 0 auto">{{ d.band }}</span><span style="font-size:12px;color:var(--muted)">{{ d.est }}</span></div></sc-for>
+          <div class="legend-label">DOZĂ DE IRADIERE</div>
+          <div class="legend-list">
+            <sc-for list="{{ legendDose }}" as="d" hint-placeholder-count="5"><div class="legend-dose-row"><div class="legend-dose-segs">{{ d.segsEl }}</div><span style="font:600 12px 'Space Grotesk',sans-serif;color:{{ d.color }};flex:0 0 auto">{{ d.band }}</span><span class="legend-est">{{ d.est }}</span></div></sc-for>
           </div>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">TIP INVESTIGAȚIE</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
-            <sc-for list="{{ legendMod }}" as="m" hint-placeholder-count="10"><div style="display:flex;align-items:center;gap:9px"><span style="{{ m.chipStyle }}">{{ m.short }}</span><span style="font-size:12.5px;color:var(--text)">{{ m.name }}</span></div></sc-for>
+          <div class="legend-label">TIP INVESTIGAȚIE</div>
+          <div class="legend-mod-grid">
+            <sc-for list="{{ legendMod }}" as="m" hint-placeholder-count="10"><div class="legend-mod-row"><span style="{{ m.chipStyle }}">{{ m.short }}</span><span class="legend-mod-name">{{ m.name }}</span></div></sc-for>
           </div>
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:16px 0 8px">GRAD RECOMANDARE</div>
-          <div style="font-size:12.5px;color:var(--muted);line-height:1.7">A — dovezi solide · B — dovezi moderate · C — consens / dovezi limitate</div>
+          <div class="legend-label ll-grad">GRAD RECOMANDARE</div>
+          <div class="legend-grad-text">A — dovezi solide · B — dovezi moderate · C — consens / dovezi limitate</div>
           </div>
         </div>
       </div>
@@ -385,34 +357,34 @@ if('serviceWorker' in navigator){
 
     <!-- ===== ABOUT / SOURCE OVERLAY ===== -->
     <sc-if value="{{ aboutOpen }}">
-      <div data-noprint onClick="{{ closeAbout }}" style="position:fixed;inset:0;z-index:80;background:var(--overlay);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))">
-        <div onClick="{{ stop }}" style="width:100%;max-width:540px;max-height:100%;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid var(--border);flex:0 0 auto"><h3 style="font:700 20px 'Space Grotesk',sans-serif;margin:0">Despre IRIS</h3><button onClick="{{ closeAbout }}" style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:16px;cursor:pointer">✕</button></div>
-          <div style="overflow:auto;padding:18px 22px 24px">
+      <div data-noprint onClick="{{ closeAbout }}" class="overlay">
+        <div onClick="{{ stop }}" class="modal">
+          <div class="modal-head"><h3 class="modal-title">Despre IRIS</h3><button onClick="{{ closeAbout }}" class="modal-close">✕</button></div>
+          <div class="modal-body-2">
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:6px 0 8px">DESPRE GHIDUL OFICIAL</div>
-          <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
+          <div class="legend-label al-first">DESPRE GHIDUL OFICIAL</div>
+          <p class="about-p">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 8px">CUI SE ADRESEAZĂ</div>
-          <p style="font-size:13.5px;line-height:1.65;color:var(--text);opacity:.9;margin:0 0 18px">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
+          <div class="legend-label al-8">CUI SE ADRESEAZĂ</div>
+          <p class="about-p">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:0 0 10px">SURSĂ</div>
-          <a href="{{ sourceUrl }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px 15px;text-decoration:none;color:inherit" style-hover="border-color:var(--accent-border)">
-            <span style="font-size:20px;color:var(--accent)">⎋</span>
-            <span style="flex:1"><span style="display:block;font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Ghid de utilizare a investigațiilor radiologice și imagistice medicale</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:4px">Ministerul Sănătății · PDF · document extern</span></span>
-            <span style="color:var(--faint);font-size:16px">›</span>
+          <div class="legend-label">SURSĂ</div>
+          <a href="{{ sourceUrl }}" target="_blank" rel="noopener" class="link-card">
+            <span class="link-icon">⎋</span>
+            <span class="flex1"><span class="link-title">Ghid de utilizare a investigațiilor radiologice și imagistice medicale</span><span class="link-meta">Ministerul Sănătății · PDF · document extern</span></span>
+            <span class="chev">›</span>
           </a>
 
-          <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--faint);margin:20px 0 10px">APLICAȚIE</div>
-          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px">
-            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Mentenanță</span><span>Dr. Costin Stroie</span></div>
-            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Contact</span><a href="mailto:costinstroie@eridu.eu.org" style="color:var(--accent);text-decoration:none">costinstroie@eridu.eu.org</a></div>
-            <div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--text)"><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:var(--faint);width:88px;flex:0 0 auto">Licență</span><span>GPL-3.0</span></div>
+          <div class="legend-label al-20">APLICAȚIE</div>
+          <div class="about-rows">
+            <div class="about-row"><span class="about-key">Mentenanță</span><span>Dr. Costin Stroie</span></div>
+            <div class="about-row"><span class="about-key">Contact</span><a href="mailto:costinstroie@eridu.eu.org" class="link-accent">costinstroie@eridu.eu.org</a></div>
+            <div class="about-row"><span class="about-key">Licență</span><span>GPL-3.0</span></div>
           </div>
-          <a href="{{ repoUrl }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px 15px;text-decoration:none;color:inherit" style-hover="border-color:var(--accent-border)">
-            <span style="font-size:20px;color:var(--accent)">⌥</span>
-            <span style="flex:1"><span style="display:block;font:600 13.5px 'Space Grotesk',sans-serif;color:var(--text)">Cod sursă pe GitHub</span><span style="display:block;font:500 11px 'IBM Plex Mono',monospace;color:var(--faint);margin-top:4px">github.com/cstroie/iris</span></span>
-            <span style="color:var(--faint);font-size:16px">›</span>
+          <a href="{{ repoUrl }}" target="_blank" rel="noopener" class="link-card">
+            <span class="link-icon">⌥</span>
+            <span class="flex1"><span class="link-title">Cod sursă pe GitHub</span><span class="link-meta">github.com/cstroie/iris</span></span>
+            <span class="chev">›</span>
           </a>
           </div>
         </div>

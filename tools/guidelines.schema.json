@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iris.local/schemas/guidelines.schema.json",
+  "title": "Ghid radioimagistic — guidelines.json",
+  "description": "Structura ierarhică a ghidului de indicații radioimagistice: Capitole → Subcapitole → Situații clinice → Recomandări.",
+  "type": "object",
+  "required": ["schemaVersion", "chapters"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "Versiunea schemei. Se incrementează la orice modificare incompatibilă a structurii."
+    },
+    "chapters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/chapter" }
+    }
+  },
+  "$defs": {
+    "chapter": {
+      "type": "object",
+      "required": ["id", "name", "count", "subchapters"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "count": { "type": "integer", "minimum": 0 },
+        "subchapters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/subchapter" }
+        }
+      }
+    },
+    "subchapter": {
+      "type": "object",
+      "required": ["id", "name", "count", "situations"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "count": { "type": "integer", "minimum": 0 },
+        "situations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/situation" }
+        }
+      }
+    },
+    "situation": {
+      "type": "object",
+      "required": ["id", "name", "placeholder", "recommendations"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "placeholder": {
+          "type": "boolean",
+          "description": "Marchează situațiile de tip 'altă situație clinică' / generice, excluse din numărătorile de count."
+        },
+        "recommendations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/recommendation" }
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": [
+        "id", "nr", "tip", "exam", "indication", "grade",
+        "comments", "otherInfo", "doseMin", "doseMax", "placeholder"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "nr": { "type": ["integer", "null"] },
+        "tip": { "type": "string" },
+        "exam": { "type": "string" },
+        "indication": { "type": "string" },
+        "grade": { "type": "string" },
+        "comments": { "type": "string" },
+        "otherInfo": { "type": "string" },
+        "doseMin": { "type": ["number", "null"] },
+        "doseMax": { "type": ["number", "null"] },
+        "placeholder": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV → JSON · Ghid radioimagistic</title>
+<style>
+  :root{ color-scheme: light dark; }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0e1116;color:#e6e9ef;padding:32px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  p.sub{color:#9aa4b2;margin:0 0 24px}
+  .drop{border:2px dashed #2b3444;border-radius:14px;padding:40px;text-align:center;background:#151a22;cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:#5b8cff;background:#161d2b}
+  .drop input{display:none}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:#5b8cff;color:#0b0f16;border:0;border-radius:10px;padding:11px 18px;font-weight:650;font-size:14px;cursor:pointer;margin-top:16px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .log{margin-top:20px;background:#0a0d12;border:1px solid #1e2530;border-radius:12px;padding:16px;font:12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;color:#b7c0cf;max-height:340px;overflow:auto}
+  .files{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .files a{background:#1a2130;border:1px solid #2b3444;color:#cdd6e4;text-decoration:none;padding:8px 12px;border-radius:9px;font-size:13px}
+  .files a:hover{border-color:#5b8cff}
+  code{background:#1a2130;padding:1px 6px;border-radius:5px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Convertor CSV → JSON</h1>
+  <p class="sub">Ghid indicații radioimagistice. Încarcă un CSV cu coloanele: <code>NR.CRT, Capitol, Subcapitol, Situația Clinică, Tip, Examen, Indicație, Grad Indicație, Comentarii, Alte informații, Doza Min, Doza Max</code>.</p>
+  <label class="drop" id="drop">
+    <div>📄 Trage fișierul CSV aici sau <b>click pentru a selecta</b></div>
+    <input type="file" id="file" accept=".csv,text/csv">
+  </label>
+  <button class="btn" id="dl" disabled>⬇ Descarcă pachetul JSON</button>
+  <div class="files" id="files"></div>
+  <div class="log" id="log">Aștept fișier…</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const logEl=$('#log'); let out=null;
+function log(m){logEl.textContent+='\n'+m; logEl.scrollTop=logEl.scrollHeight;}
+function reset(){logEl.textContent='';}
+
+function parseCSV(text){const rows=[];let row=[],field='',inQ=false;for(let i=0;i<text.length;i++){const c=text[i];if(inQ){if(c==='"'){if(text[i+1]==='"'){field+='"';i++;}else inQ=false;}else field+=c;}else{if(c==='"')inQ=true;else if(c===','){row.push(field);field='';}else if(c==='\r'){}else if(c==='\n'){row.push(field);rows.push(row);row=[];field='';}else field+=c;}}if(field.length||row.length){row.push(field);rows.push(row);}return rows;}
+const fixDia=s=>(s||'').replace(/ş/g,'ș').replace(/Ş/g,'Ș').replace(/ţ/g,'ț').replace(/Ţ/g,'Ț');
+const clean=s=>fixDia((s||'').replace(/\s+/g,' ').trim());
+const canon=s=>fixDia(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,;:()\/-]/g,' ').replace(/\s+/g,' ').trim();
+const slug=s=>canon(s).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
+const isPlaceholder=(sit,exam)=>/alta situatie clinica|refaceti selectia|situatie clinica neincadrabila|vezi detalii ghid/.test(canon(sit)+' '+canon(exam));
+
+function convert(csv){
+  const rows=parseCSV(csv), header=rows[0], idx={}; header.forEach((h,i)=>idx[h.trim()]=i);
+  const data=rows.slice(1).filter(r=>r.length>1&&r.some(x=>x.trim()));
+  const chapters=new Map(),subchapters=new Map(),situations=new Map(),recommendations=[];
+  let chOrder=0,ph=0;
+  const pickName=(e,c)=>{if(!e)return c;const sc=n=>((n.match(/[șțăâîȘȚĂÂÎ]/g)||[]).length)+(/^[A-ZȘȚĂÂÎ]/.test(n)?2:0);return sc(c)>sc(e)?c:e;};
+  data.forEach(r=>{
+    const cap=clean(r[idx['Capitol']]),sub=clean(r[idx['Subcapitol']]),sit=clean(r[idx['Situația Clinică']]),exam=clean(r[idx['Examen']]);
+    const ck=canon(cap),sk=canon(sub),stk=canon(sit);
+    if(!chapters.has(ck))chapters.set(ck,{id:'c-'+slug(cap),name:cap,order:chOrder++,count:0});
+    const ch=chapters.get(ck);ch.name=pickName(ch.name,cap);
+    const subKey=ck+'|'+sk;
+    if(!subchapters.has(subKey))subchapters.set(subKey,{id:ch.id+'__s-'+slug(sub),name:sub,chapterId:ch.id,order:subchapters.size,count:0});
+    const sb=subchapters.get(subKey);sb.name=pickName(sb.name,sub);
+    const isph=isPlaceholder(sit,exam);if(isph)ph++;
+    const sitKey=subKey+'|'+stk;
+    if(!situations.has(sitKey))situations.set(sitKey,{id:sb.id+'__q-'+slug(sit),name:sit,subchapterId:sb.id,chapterId:ch.id,placeholder:isph,order:situations.size,count:0});
+    const st=situations.get(sitKey);st.name=pickName(st.name,sit);
+    const dn=r[idx['Doza Min']].trim(),dx=r[idx['Doza Max']].trim();
+    recommendations.push({id:'r-'+(recommendations.length+1),situationId:st.id,nr:parseInt(r[idx['NR.CRT']])||null,tip:r[idx['Tip']].trim(),exam,indication:clean(r[idx['Indicație']]),grade:clean(r[idx['Grad Indicație']]).replace(/^\?$/,''),comments:clean(r[idx['Comentarii']]),otherInfo:clean(r[idx['Alte informații']]),doseMin:dn===''?null:Number(dn),doseMax:dx===''?null:Number(dx),placeholder:isph});
+  });
+  const sitById=new Map([...situations.values()].map(s=>[s.id,s])),subById=new Map([...subchapters.values()].map(s=>[s.id,s])),chById=new Map([...chapters.values()].map(c=>[c.id,c]));
+  recommendations.forEach(r=>{if(!r.placeholder)sitById.get(r.situationId).count++;});
+  situations.forEach(s=>{if(!s.placeholder){subById.get(s.subchapterId).count++;chById.get(s.chapterId).count++;}});
+  const chA=[...chapters.values()].sort((a,b)=>a.order-b.order),sbA=[...subchapters.values()].sort((a,b)=>a.order-b.order),stA=[...situations.values()].sort((a,b)=>a.order-b.order);
+  const strip=({order,...x})=>x;
+  const nested=chA.map(c=>({id:c.id,name:c.name,count:c.count,subchapters:sbA.filter(s=>s.chapterId===c.id).map(s=>({id:s.id,name:s.name,count:s.count,situations:stA.filter(q=>q.subchapterId===s.id).map(q=>({id:q.id,name:q.name,placeholder:q.placeholder,recommendations:recommendations.filter(r=>r.situationId===q.id).map(({situationId,...r})=>r)}))}))}));
+  log('✓ '+data.length+' rânduri procesate');
+  log('  Capitole: '+chA.length+'  ·  Subcapitole: '+sbA.length+'  ·  Situații: '+stA.length+' (marcaje: '+ph+')');
+  return {
+    'chapters.json':chA.map(strip),
+    'subchapters.json':sbA.map(strip),
+    'situations.json':stA.map(strip),
+    'recommendations.json':recommendations,
+    'guidelines.json':{schemaVersion:1,chapters:nested}
+  };
+}
+function handle(file){
+  reset(); log('Citesc '+file.name+' …');
+  const fr=new FileReader();
+  fr.onload=()=>{ try{ out=convert(fr.result); showFiles(); $('#dl').disabled=false; log('\nGata. Apasă „Descarcă".'); }catch(e){ log('✗ Eroare: '+e.message); } };
+  fr.readAsText(file,'utf-8');
+}
+function showFiles(){
+  const box=$('#files'); box.innerHTML='';
+  Object.keys(out).forEach(name=>{
+    const blob=new Blob([JSON.stringify(out[name],null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.textContent='⬇ '+name; box.appendChild(a);
+  });
+}
+$('#dl').onclick=()=>{ if(!out)return; Object.keys(out).forEach((name,i)=>setTimeout(()=>{const blob=new Blob([JSON.stringify(out[name],null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();},i*250)); };
+const drop=$('#drop'),input=$('#file');
+input.onchange=e=>{ if(e.target.files[0])handle(e.target.files[0]); };
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f)handle(f); });
+</script>
+</body>
+</html>
