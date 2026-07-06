@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="192x192" href="pwa/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="pwa/icon-512.png">
+<link rel="apple-touch-icon" href="pwa/icon-192.png">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -23,11 +26,19 @@
     <header data-noprint class="app-header">
       <div role="button" onClick="{{ goHome }}" class="brand">
         <div class="brand-mark"><span class="brand-dot"></span></div>
+<<<<<<< Updated upstream
         <div class="brand-text"><span class="brand-name">IRIS</span><span class="brand-sub">INDICAȚII RADIOIMAGISTICE STRUCTURATE</span></div>
       </div>
       <div class="header-actions">
         <button onClick="{{ openLegend }}" title="Legendă" class="icon-btn">ⓘ</button>
         <button onClick="{{ toggleTheme }}" title="Temă" class="icon-btn">{{ themeIcon }}</button>
+=======
+        <div class="brand-text"><span class="brand-name">IRIS</span><span class="brand-sub">Indicații RadioImagistice Structurate</span></div>
+      </div>
+      <div class="header-actions">
+        <button onClick="{{ openLegend }}" title="Legendă" aria-label="Deschide legenda" class="icon-btn">ⓘ</button>
+        <button onClick="{{ toggleTheme }}" title="Temă" aria-label="Comută tema deschis/întunecat" class="icon-btn">{{ themeIcon }}</button>
+>>>>>>> Stashed changes
       </div>
     </header>
 
@@ -96,7 +107,11 @@
         <div class="searchbar">
           <span class="accent-icon">⌕</span>
           <input ref="{{ inputRef }}" value="{{ query }}" onInput="{{ onInput }}" placeholder="Caută simptom, examen sau fragment de cuvânt…" class="search-input" />
+<<<<<<< Updated upstream
           <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" class="clear-btn">✕</button></sc-if>
+=======
+          <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" aria-label="Șterge căutarea" class="clear-btn">✕</button></sc-if>
+>>>>>>> Stashed changes
         </div>
 
         <sc-if value="{{ aiAvailable }}">
@@ -116,7 +131,11 @@
             <div class="chip-row">
               <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
             </div>
+<<<<<<< Updated upstream
             <p class="intro-note">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: Iris găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
+=======
+            <p class="intro-note">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: IRIS găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
+>>>>>>> Stashed changes
           </div>
         </sc-if>
 
@@ -127,7 +146,11 @@
             <sc-for list="{{ resultsVM }}" as="r" hint-placeholder-count="5">
               <div role="button" onClick="{{ r.onOpen }}" class="card">
                 <div class="card-crumb">{{ r.crumb }}</div>
+<<<<<<< Updated upstream
                 <div class="result-name">{{ r.name }}</div>
+=======
+                <div class="result-name"><sc-for list="{{ r.nameParts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark class="hl">{{ p.text }}</mark></sc-if><sc-if value="{{ p.plain }}">{{ p.text }}</sc-if></sc-for></div>
+>>>>>>> Stashed changes
                 <div class="meta-row">
                   <span style="{{ r.bestStyle }}">{{ r.bestIcon }} {{ r.bestExam }}</span>
                   <span class="mono-faint-11">{{ r.recMeta }}</span>
@@ -150,7 +173,11 @@
       <!-- ============ CHAPTER ============ -->
       <sc-if value="{{ isChapter }}">
       <div>
+<<<<<<< Updated upstream
         <div data-noprint class="crumbbar-9"><button onClick="{{ goHome }}" class="back-btn">‹</button><span class="crumb-static">CAPITOL</span></div>
+=======
+        <div data-noprint class="crumbbar-9"><button onClick="{{ goHome }}" aria-label="Înapoi la Acasă" class="back-btn">‹</button><span role="button" onClick="{{ goHome }}" class="crumb-link">ACASĂ</span></div>
+>>>>>>> Stashed changes
         <h2 class="title-ch">{{ curChapterName }}</h2>
         <div class="view-meta">{{ curChapterMeta }}</div>
         <div class="list-col-9">
@@ -169,7 +196,11 @@
       <!-- ============ SUBCHAPTER ============ -->
       <sc-if value="{{ isSub }}">
       <div>
+<<<<<<< Updated upstream
         <div data-noprint class="crumbbar"><button onClick="{{ backToChapter }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+=======
+        <div data-noprint class="crumbbar"><button onClick="{{ backToChapter }}" aria-label="Înapoi la capitol" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+>>>>>>> Stashed changes
         <h2 class="title-sub">{{ curSubName }}</h2>
         <div class="view-meta">{{ curSubMeta }}</div>
         <div class="list-col">
@@ -191,15 +222,23 @@
       <sc-if value="{{ isSit }}">
       <div>
         <div data-printonly class="print-head">
+<<<<<<< Updated upstream
           <div class="print-brand-row"><span class="print-brand">IRIS</span><span class="print-sub">Indicații radioimagistice structurate</span></div>
           <div class="print-crumb">{{ sitPrintCrumb }}</div>
         </div>
         <div data-noprint class="crumbbar"><button onClick="{{ backToSub }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+=======
+          <div class="print-brand-row"><span class="print-brand">IRIS</span><span class="print-sub">Indicații RadioImagistice Structurate</span></div>
+        </div>
+        <div data-noprint class="crumbbar"><button onClick="{{ backToSub }}" aria-label="Înapoi la subcapitol" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
+        <div data-printonly class="print-eyebrow">{{ sitPrintCrumb }}</div>
+>>>>>>> Stashed changes
         <h2 class="title-sit">{{ curSitName }}</h2>
         <div data-noprint class="action-row">
           <button onClick="{{ toggleFav }}" style="{{ favBtnStyle }}">{{ favIcon }} {{ favLabel }}</button>
           <button onClick="{{ doShare }}" class="action-btn">⤴ Distribuie</button>
           <button onClick="{{ doPrint }}" class="action-btn">⎙ Printează</button>
+<<<<<<< Updated upstream
           <button onClick="{{ togglePregnancy }}" style="{{ pregBtnStyle }}" title="Evidențiază investigațiile care implică iradiere">⚠ Sarcină</button>
         </div>
         <sc-if value="{{ pregnancy }}">
@@ -208,6 +247,9 @@
             <span class="warn-text">Mod sarcină: investigațiile care implică radiații ionizante sunt marcate. Preferă alternativele fără iradiere când sunt adecvate clinic; decizia finală ține cont de raportul risc/beneficiu.</span>
           </div>
         </sc-if>
+=======
+        </div>
+>>>>>>> Stashed changes
         <sc-if value="{{ showFreeNudge }}">
           <div data-noprint class="nudge-banner">
             <span class="nudge-icon">◇</span>
@@ -231,11 +273,18 @@
                 <span style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.03em;white-space:nowrap;color:{{ r.doseColor }}">{{ r.doseLabel }}</span>
               </div>
               </sc-if>
+<<<<<<< Updated upstream
               <sc-if value="{{ r.pregWarn }}"><div class="preg-warn">⚠ IMPLICĂ IRADIERE</div></sc-if>
             </div>
           </sc-for>
         </div>
         <div data-printonly class="print-foot">IRIS — Indicații radioimagistice structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
+=======
+            </div>
+          </sc-for>
+        </div>
+        <div data-printonly class="print-foot">IRIS — Indicații RadioImagistice Structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
+>>>>>>> Stashed changes
       </div>
       </sc-if>
 
@@ -298,7 +347,11 @@
       <div data-noprint class="install-card">
         <div class="snack-icon">⎋</div>
         <div class="snack-body"><div class="snack-title-14">Adaugă IRIS pe ecranul principal</div><div class="snack-sub-muted">Apasă <b class="txt-strong">Partajează ⎋</b> apoi <b class="txt-strong">Adaugă la ecranul principal</b></div></div>
+<<<<<<< Updated upstream
         <button onClick="{{ dismissInstall }}" class="snack-close">✕</button>
+=======
+        <button onClick="{{ dismissInstall }}" aria-label="Închide" class="snack-close">✕</button>
+>>>>>>> Stashed changes
       </div>
     </sc-if>
 
@@ -306,7 +359,11 @@
     <sc-if value="{{ legendOpen }}">
       <div data-noprint onClick="{{ closeLegend }}" class="overlay">
         <div onClick="{{ stop }}" class="modal">
+<<<<<<< Updated upstream
           <div class="modal-head"><h3 class="modal-title">Legendă</h3><button onClick="{{ closeLegend }}" class="modal-close">✕</button></div>
+=======
+          <div class="modal-head"><h3 class="modal-title">Legendă</h3><button onClick="{{ closeLegend }}" aria-label="Închide legenda" class="modal-close">✕</button></div>
+>>>>>>> Stashed changes
           <div class="modal-body">
 
           <div class="legend-label ll-first">RECOMANDARE</div>
@@ -334,11 +391,19 @@
     <sc-if value="{{ aboutOpen }}">
       <div data-noprint onClick="{{ closeAbout }}" class="overlay">
         <div onClick="{{ stop }}" class="modal">
+<<<<<<< Updated upstream
           <div class="modal-head"><h3 class="modal-title">Despre IRIS</h3><button onClick="{{ closeAbout }}" class="modal-close">✕</button></div>
+=======
+          <div class="modal-head"><h3 class="modal-title">Despre IRIS</h3><button onClick="{{ closeAbout }}" aria-label="Închide" class="modal-close">✕</button></div>
+>>>>>>> Stashed changes
           <div class="modal-body-2">
 
           <div class="legend-label al-first">DESPRE GHIDUL OFICIAL</div>
           <p class="about-p">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
+<<<<<<< Updated upstream
+=======
+          <p class="about-p">Scopul final: cea mai bună investigație pentru pacient, cu cea mai mică doză de radiații posibilă și fără a suprasolicita echipamentele și timpul echipei medicale.</p>
+>>>>>>> Stashed changes
 
           <div class="legend-label al-8">CUI SE ADRESEAZĂ</div>
           <p class="about-p">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
@@ -353,7 +418,11 @@
           <div class="legend-label al-20">APLICAȚIE</div>
           <div class="about-rows">
             <div class="about-row"><span class="about-key">Mentenanță</span><span>Dr. Costin Stroie</span></div>
+<<<<<<< Updated upstream
             <div class="about-row"><span class="about-key">Contact</span><a href="/cdn-cgi/l/email-protection#294a465a5d40475a5d5b46404c694c5b404d5c074c5c07465b4e" class="link-accent"><span class="__cf_email__" data-cfemail="ff9c908c8b96918c8b8d90969abf9a8d969b8ad19a8ad1908d98">[email&#160;protected]</span></a></div>
+=======
+            <div class="about-row"><span class="about-key">Contact</span><a href="/cdn-cgi/l/email-protection#e9809b809aa98c9b808d9cc78c9cc7869b8e" class="link-accent"><span class="__cf_email__" data-cfemail="caa3b8a3b98aafb8a3aebfe4afbfe4a5b8ad">[email&#160;protected]</span></a></div>
+>>>>>>> Stashed changes
             <div class="about-row"><span class="about-key">Licență</span><span>GPL-3.0</span></div>
           </div>
           <a href="{{ repoUrl }}" target="_blank" rel="noopener" class="link-card">
@@ -371,10 +440,26 @@
 </x-dc>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:880},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;,&quot;options&quot;:[&quot;oklch(0.86 0.2 128)&quot;,&quot;oklch(0.78 0.16 200)&quot;,&quot;oklch(0.8 0.17 85)&quot;,&quot;oklch(0.72 0.17 25)&quot;]},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dark&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aspect&quot;}}">
 class Component extends DCLogic {
-  state = { view:'home', theme:'dark', chapterId:null, subId:null, sitId:null, query:'', results:[], favs:[], recent:[], access:{}, toast:'', legendOpen:false, aboutOpen:false, aiBusy:false, aiNote:'', updateReady:false, pregnancy:false };
+  state = { view:'home', theme:'dark', chapterId:null, subId:null, sitId:null, query:'', results:[], favs:[], recent:[], access:{}, toast:'', legendOpen:false, aboutOpen:false, aiBusy:false, aiNote:'', updateReady:false };
 
   // ---------- lifecycle ----------
-  componentDidMount(){ this._tries=0; this.initData(); this.initInstall(); this.initHistory(); this.initUpdate(); }
+  componentDidMount(){ this._tries=0; this.initData(); this.initInstall(); this.initHistory(); this.initUpdate(); this.initSwipe(); }
+  initSwipe(){
+    this._ts=null;
+    this._touchStart=(e)=>{ const t=e.touches[0]; this._ts={x:t.clientX,y:t.clientY,time:Date.now()}; };
+    this._touchEnd=(e)=>{
+      if(!this._ts) return;
+      const t=e.changedTouches[0];
+      const dx=t.clientX-this._ts.x, dy=t.clientY-this._ts.y, dt=Date.now()-this._ts.time;
+      const canGoBack = this.state.legendOpen || this.state.aboutOpen || this.state.view!=='home';
+      if(this._ts.x<50 && dx>70 && Math.abs(dy)<60 && dt<600 && canGoBack){
+        try{ history.back(); }catch(e){}
+      }
+      this._ts=null;
+    };
+    document.addEventListener('touchstart', this._touchStart, {passive:true});
+    document.addEventListener('touchend', this._touchEnd, {passive:true});
+  }
   initUpdate(){
     this._upd=()=>this.setState({updateReady:true});
     window.addEventListener('iris-update-ready', this._upd);
@@ -435,7 +520,7 @@ class Component extends DCLogic {
     this._key=(e)=>{ if(e.key==='/' && !/input|textarea/i.test(e.target.tagName)){ e.preventDefault(); this.goSearch(); } };
     window.addEventListener('keydown',this._key);
   }
-  componentWillUnmount(){ window.removeEventListener('keydown',this._key); if(this._bip)window.removeEventListener('beforeinstallprompt',this._bip); if(this._installed)window.removeEventListener('appinstalled',this._installed); if(this._pop)window.removeEventListener('popstate',this._pop); if(this._upd)window.removeEventListener('iris-update-ready',this._upd); }
+  componentWillUnmount(){ window.removeEventListener('keydown',this._key); if(this._bip)window.removeEventListener('beforeinstallprompt',this._bip); if(this._installed)window.removeEventListener('appinstalled',this._installed); if(this._pop)window.removeEventListener('popstate',this._pop); if(this._upd)window.removeEventListener('iris-update-ready',this._upd); if(this._touchStart)document.removeEventListener('touchstart',this._touchStart); if(this._touchEnd)document.removeEventListener('touchend',this._touchEnd); }
   componentDidUpdate(){ this.applyRoot(); }
   applyRoot(){ if(this.root){ this.root.setAttribute('data-theme', this.state.theme); const a=this.props.accent; if(a) this.root.style.setProperty('--accent', a); } }
 
@@ -486,6 +571,21 @@ class Component extends DCLogic {
     else if(mn!==lvl && this.BANDS[mn]) label=`IRADIERE ${this.BANDS[mn].toUpperCase()}–${band.toUpperCase()}`;
     else label=`IRADIERE ${band.toUpperCase()}`;
     return {hasDose:true, level:lvl, segs:this.doseSegs(lvl), color:this.doseTextColor(lvl), label};
+  }
+  DIAC={a:'[aăâ]',i:'[iî]',s:'[sșş]',t:'[tțţ]'};
+  highlightRegex(q){
+    const raw=(q||'').trim(); if(raw.length<2) return null;
+    const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const tokens=raw.split(/\s+/).filter(t=>t.length>1);
+    if(!tokens.length) return null;
+    const parts=tokens.map(t=>t.toLowerCase().split('').map(ch=>this.DIAC[ch]||esc(ch)).join(''));
+    try{ return new RegExp('('+parts.join('|')+')','gi'); }catch(e){ return null; }
+  }
+  highlightParts(text, re){
+    if(!re) return [{text, hl:false, plain:true}];
+    const segs=text.split(re);
+    if(segs.length<=1) return [{text, hl:false, plain:true}];
+    return segs.filter(s=>s!=='').map(s=>{ re.lastIndex=0; const isMatch=re.test(s) && s.length && new RegExp('^(?:'+re.source+')$','i').test(s); return {text:s, hl:isMatch, plain:!isMatch}; });
   }
   bestRec(recs){ // most-indicated (lowest tier)
     const tier=r=>{const v=this.D.legend.indication&&this.D.legend.indication.values[r.indication]; return v?(v.tier||9):9;};
@@ -590,14 +690,13 @@ class Component extends DCLogic {
   }
 
   // ---------- favorites / share / print ----------
-  togglePregnancy=()=>{ this.setState(s=>({pregnancy:!s.pregnancy})); };
   toggleFav=()=>{ const id=this.state.sitId; const favs=this.state.favs.includes(id)?this.state.favs.filter(x=>x!==id):[...this.state.favs,id]; this.setState({favs, toast: this.state.favs.includes(id)?'Eliminat din salvate':'Salvat ★'}); try{localStorage.setItem('iris.favs',JSON.stringify(favs));}catch(e){} clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800); };
   doPrint=()=>{ const prev=this.state.theme; const run=()=>{ try{window.print();}catch(e){} if(this.state.theme!==prev) this.setState({theme:prev}); }; if(prev!=='light'){ this.setState({theme:'light'}); setTimeout(run,140); } else { run(); } };
   doShare=async ()=>{
     const s=this.sitById.get(this.state.sitId); if(!s) return;
     const recs=this.recsBySit.get(s.id)||[];
-    const text=`${s.name}\n\n`+recs.map(r=>`• ${r.exam} — ${r.indication}${r.grade?` (grad ${r.grade})`:''}`).join('\n')+`\n\n— IRIS · Indicații radioimagistice structurate`;
-    try{ if(navigator.share){ await navigator.share({title:'Iris — '+s.name, text}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+    const text=`${s.name}\n\n`+recs.map(r=>`• ${r.exam} — ${r.indication}${r.grade?` (grad ${r.grade})`:''}`).join('\n')+`\n\n— IRIS · Indicații RadioImagistice Structurate`;
+    try{ if(navigator.share){ await navigator.share({title:'IRIS — '+s.name, text}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
     try{ await navigator.clipboard.writeText(text); this.setState({toast:'Copiat în clipboard'}); }catch(e){ this.setState({toast:'Nu s-a putut copia'}); }
     clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1800);
   }
@@ -680,8 +779,10 @@ class Component extends DCLogic {
       vals.hasResults = hasQ && res.length>0;
       vals.noResults = hasQ && this.norm(this.state.query).length>=2 && res.length===0;
       vals.resultLabel = `${res.length} ${res.length===1?'REZULTAT':'REZULTATE'}`;
+      const hlRe=this.highlightRegex(this.state.query);
       vals.resultsVM = res.map(sit=>this.sitCard(sit, ()=>this.openSit(sit.id), true)).map((c,i)=>({...c,
-        crumb:c.crumb.toUpperCase()
+        crumb:c.crumb.toUpperCase(),
+        nameParts:this.highlightParts(c.name, hlRe)
       }));
     }
 
@@ -698,7 +799,7 @@ class Component extends DCLogic {
     if(v==='sub'){
       const s=this.subById.get(this.state.subId), c=this.chById.get(this.state.chapterId);
       vals.curSubName=s?s.name:'';
-      vals.subCrumbs=[{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:false}];
+      vals.subCrumbs=[{label:'ACASĂ', onClick:this.goHome, sep:false},{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:true}];
       vals.curSubMeta=s?`${(this.sitsBySub.get(s.id)||[]).length} situații clinice`:'';
       vals.backToChapter=this.backToChapter;
       vals.sitsVM=(this.sitsBySub.get(this.state.subId)||[]).map(q=>this.sitCard(q, ()=>this.openSit(q.id), false));
@@ -709,16 +810,13 @@ class Component extends DCLogic {
       const s=this.sitById.get(this.state.sitId), c=this.chById.get(this.state.chapterId), sub=this.subById.get(this.state.subId);
       vals.curSitName=s?s.name:'';
       vals.sitPrintCrumb=[(c?c.name:''),(sub?sub.name:'')].filter(Boolean).join('  /  ');
-      vals.sitCrumbs=[{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:false},{label:(sub?sub.name:'').toUpperCase(), onClick:()=>this.openSub(this.state.subId), sep:true}];
+      vals.sitCrumbs=[{label:'ACASĂ', onClick:this.goHome, sep:false},{label:(c?c.name:'').toUpperCase(), onClick:()=>this.openChapter(this.state.chapterId), sep:true},{label:(sub?sub.name:'').toUpperCase(), onClick:()=>this.openSub(this.state.subId), sep:true}];
       vals.backToSub=this.backToSub;
       const fav=this.state.favs.includes(this.state.sitId);
       vals.favActive=fav; vals.favIcon=fav?'★':'☆'; vals.favLabel=fav?'Salvat':'Salvează';
       vals.favBtnStyle=`display:inline-flex;align-items:center;gap:7px;border:1px solid ${fav?'var(--accent-border)':'var(--border)'};background:${fav?'var(--accent-dim)':'var(--surface)'};color:${fav?'var(--accent)':'var(--muted)'};border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer`;
       vals.toggleFav=this.toggleFav; vals.doShare=this.doShare; vals.doPrint=this.doPrint;
       const recs=this.recsBySit.get(this.state.sitId)||[];
-      const preg=this.state.pregnancy;
-      vals.pregnancy=preg; vals.togglePregnancy=this.togglePregnancy;
-      vals.pregBtnStyle=`display:inline-flex;align-items:center;gap:7px;border:1px solid ${preg?'oklch(0.7 0.12 20 / .5)':'var(--border)'};background:${preg?'oklch(0.5 0.12 20 / .16)':'var(--surface)'};color:${preg?'oklch(0.72 0.15 20)':'var(--muted)'};border-radius:11px;padding:9px 14px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap`;
       // radiation-free nudge: best is irradiating, but a well-indicated non-irradiating option exists
       const tierOf=r=>{const v=this.D.legend.indication&&this.D.legend.indication.values[r.indication]; return v?(v.tier||9):9;};
       const best=this.bestRec(recs);
@@ -728,10 +826,7 @@ class Component extends DCLogic {
       vals.freeNudgeExam = altFree?altFree.exam:'';
       vals.recsVM=recs.map(r=>{
         const dose=this.doseInfo(r);
-        const irradiating = dose.hasDose && dose.level>0;
         return {
-          pregWarn: preg && irradiating,
-          pregSafe: preg && dose.hasDose && dose.level===0,
           tipShort:this.tipShort(r.tip), chipStyle:this.chipStyle(r.tip),
           exam:r.exam, indication:r.indication||'—', indIcon:this.indIcon(r.indication),
           badgeStyle:this.badgeStyle(r.indication), barColor:this.badgeBar(r.indication),

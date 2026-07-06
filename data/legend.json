@@ -60,37 +60,37 @@
       "Indicat": {
         "tier": 1,
         "tone": "go",
-        "desc": "Investigație indicată / recomandată."
+        "desc": "Investigația cu cea mai mare șansă de a contribui la diagnostic și la conduita terapeutică — prima alegere pentru acest tablou clinic."
       },
       "Doar în cazuri particulare": {
         "tier": 2,
         "tone": "caution",
-        "desc": "Indicată doar în situații particulare selectate."
+        "desc": "Nu este o investigație de rutină. Se ia în calcul doar dacă există un motiv clinic concret care o justifică; altfel, poate fi corect să se amâne examinarea și să se reevalueze pacientul în timp."
       },
       "Doar cu aviz specializat": {
         "tier": 3,
         "tone": "caution",
-        "desc": "Se efectuează doar cu aviz de specialitate."
+        "desc": "Investigație complexă, laborioasă și consumatoare de resurse — se solicită de regulă doar după discuție cu medicul radiolog / de medicină nucleară sau conform protocolului local."
       },
       "Neindicat în primă intenție": {
         "tier": 4,
         "tone": "stop",
-        "desc": "Nu este investigația de primă intenție."
+        "desc": "Poate deveni utilă ulterior, dar nu ca prim pas — se recomandă epuizarea altor investigații mai potrivite înaintea acesteia."
       },
       "Neindicat": {
         "tier": 5,
         "tone": "stop",
-        "desc": "Nu este indicată."
+        "desc": "Justificarea propusă pentru această investigație nu (mai) este susținută de dovezi în acest context clinic."
       },
       "Este necesară justificare detaliată": {
         "tier": 2,
         "tone": "caution",
-        "desc": "Necesită justificare clinică detaliată."
+        "desc": "Se efectuează doar dacă medicul solicitant oferă un motiv clinic explicit și documentat; fără acesta, examinarea nu este justificată."
       },
       "Vezi Detalii Ghid!": {
         "tier": 0,
         "tone": "info",
-        "desc": "Consultați detaliile din ghid."
+        "desc": "Recomandare dependentă de context — consultați secțiunea corespunzătoare din ghidul oficial pentru nuanțele situației."
       }
     }
   },
