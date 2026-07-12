@@ -26,19 +26,11 @@
     <header data-noprint class="app-header">
       <div role="button" onClick="{{ goHome }}" class="brand">
         <div class="brand-mark"><span class="brand-dot"></span></div>
-<<<<<<< Updated upstream
-        <div class="brand-text"><span class="brand-name">IRIS</span><span class="brand-sub">INDICAȚII RADIOIMAGISTICE STRUCTURATE</span></div>
-      </div>
-      <div class="header-actions">
-        <button onClick="{{ openLegend }}" title="Legendă" class="icon-btn">ⓘ</button>
-        <button onClick="{{ toggleTheme }}" title="Temă" class="icon-btn">{{ themeIcon }}</button>
-=======
         <div class="brand-text"><span class="brand-name">IRIS</span><span class="brand-sub">Indicații RadioImagistice Structurate</span></div>
       </div>
       <div class="header-actions">
         <button onClick="{{ openLegend }}" title="Legendă" aria-label="Deschide legenda" class="icon-btn">ⓘ</button>
         <button onClick="{{ toggleTheme }}" title="Temă" aria-label="Comută tema deschis/întunecat" class="icon-btn">{{ themeIcon }}</button>
->>>>>>> Stashed changes
       </div>
     </header>
 
@@ -107,11 +99,7 @@
         <div class="searchbar">
           <span class="accent-icon">⌕</span>
           <input ref="{{ inputRef }}" value="{{ query }}" onInput="{{ onInput }}" placeholder="Caută simptom, examen sau fragment de cuvânt…" class="search-input" />
-<<<<<<< Updated upstream
-          <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" class="clear-btn">✕</button></sc-if>
-=======
           <sc-if value="{{ hasQuery }}"><button onClick="{{ clearQuery }}" aria-label="Șterge căutarea" class="clear-btn">✕</button></sc-if>
->>>>>>> Stashed changes
         </div>
 
         <sc-if value="{{ aiAvailable }}">
@@ -131,11 +119,7 @@
             <div class="chip-row">
               <sc-for list="{{ exampleChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
             </div>
-<<<<<<< Updated upstream
-            <p class="intro-note">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: Iris găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
-=======
             <p class="intro-note">Poți căuta liber — în română, engleză sau termeni uzuali. Este suficient un fragment de cuvânt: IRIS găsește potriviri parțiale, înțelege sinonime și corectează greșeli de tastare. Caută și în comentarii și în denumirile examenelor.</p>
->>>>>>> Stashed changes
           </div>
         </sc-if>
 
@@ -146,11 +130,7 @@
             <sc-for list="{{ resultsVM }}" as="r" hint-placeholder-count="5">
               <div role="button" onClick="{{ r.onOpen }}" class="card">
                 <div class="card-crumb">{{ r.crumb }}</div>
-<<<<<<< Updated upstream
-                <div class="result-name">{{ r.name }}</div>
-=======
                 <div class="result-name"><sc-for list="{{ r.nameParts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark class="hl">{{ p.text }}</mark></sc-if><sc-if value="{{ p.plain }}">{{ p.text }}</sc-if></sc-for></div>
->>>>>>> Stashed changes
                 <div class="meta-row">
                   <span style="{{ r.bestStyle }}">{{ r.bestIcon }} {{ r.bestExam }}</span>
                   <span class="mono-faint-11">{{ r.recMeta }}</span>
@@ -173,11 +153,7 @@
       <!-- ============ CHAPTER ============ -->
       <sc-if value="{{ isChapter }}">
       <div>
-<<<<<<< Updated upstream
-        <div data-noprint class="crumbbar-9"><button onClick="{{ goHome }}" class="back-btn">‹</button><span class="crumb-static">CAPITOL</span></div>
-=======
         <div data-noprint class="crumbbar-9"><button onClick="{{ goHome }}" aria-label="Înapoi la Acasă" class="back-btn">‹</button><span role="button" onClick="{{ goHome }}" class="crumb-link">ACASĂ</span></div>
->>>>>>> Stashed changes
         <h2 class="title-ch">{{ curChapterName }}</h2>
         <div class="view-meta">{{ curChapterMeta }}</div>
         <div class="list-col-9">
@@ -196,11 +172,7 @@
       <!-- ============ SUBCHAPTER ============ -->
       <sc-if value="{{ isSub }}">
       <div>
-<<<<<<< Updated upstream
-        <div data-noprint class="crumbbar"><button onClick="{{ backToChapter }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
-=======
         <div data-noprint class="crumbbar"><button onClick="{{ backToChapter }}" aria-label="Înapoi la capitol" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ subCrumbs }}" as="cr" hint-placeholder-count="1"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
->>>>>>> Stashed changes
         <h2 class="title-sub">{{ curSubName }}</h2>
         <div class="view-meta">{{ curSubMeta }}</div>
         <div class="list-col">
@@ -222,34 +194,16 @@
       <sc-if value="{{ isSit }}">
       <div>
         <div data-printonly class="print-head">
-<<<<<<< Updated upstream
-          <div class="print-brand-row"><span class="print-brand">IRIS</span><span class="print-sub">Indicații radioimagistice structurate</span></div>
-          <div class="print-crumb">{{ sitPrintCrumb }}</div>
-        </div>
-        <div data-noprint class="crumbbar"><button onClick="{{ backToSub }}" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
-=======
           <div class="print-brand-row"><span class="print-brand">IRIS</span><span class="print-sub">Indicații RadioImagistice Structurate</span></div>
         </div>
         <div data-noprint class="crumbbar"><button onClick="{{ backToSub }}" aria-label="Înapoi la subcapitol" class="back-btn">‹</button><div class="crumb-wrap"><sc-for list="{{ sitCrumbs }}" as="cr" hint-placeholder-count="2"><sc-if value="{{ cr.sep }}"><span class="crumb-sep">/</span></sc-if><span role="button" onClick="{{ cr.onClick }}" class="crumb-link">{{ cr.label }}</span></sc-for></div></div>
         <div data-printonly class="print-eyebrow">{{ sitPrintCrumb }}</div>
->>>>>>> Stashed changes
         <h2 class="title-sit">{{ curSitName }}</h2>
         <div data-noprint class="action-row">
           <button onClick="{{ toggleFav }}" style="{{ favBtnStyle }}">{{ favIcon }} {{ favLabel }}</button>
           <button onClick="{{ doShare }}" class="action-btn">⤴ Distribuie</button>
           <button onClick="{{ doPrint }}" class="action-btn">⎙ Printează</button>
-<<<<<<< Updated upstream
-          <button onClick="{{ togglePregnancy }}" style="{{ pregBtnStyle }}" title="Evidențiază investigațiile care implică iradiere">⚠ Sarcină</button>
         </div>
-        <sc-if value="{{ pregnancy }}">
-          <div data-noprint class="warn-banner">
-            <span class="warn-icon">⚠</span>
-            <span class="warn-text">Mod sarcină: investigațiile care implică radiații ionizante sunt marcate. Preferă alternativele fără iradiere când sunt adecvate clinic; decizia finală ține cont de raportul risc/beneficiu.</span>
-          </div>
-        </sc-if>
-=======
-        </div>
->>>>>>> Stashed changes
         <sc-if value="{{ showFreeNudge }}">
           <div data-noprint class="nudge-banner">
             <span class="nudge-icon">◇</span>
@@ -273,18 +227,10 @@
                 <span style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.03em;white-space:nowrap;color:{{ r.doseColor }}">{{ r.doseLabel }}</span>
               </div>
               </sc-if>
-<<<<<<< Updated upstream
-              <sc-if value="{{ r.pregWarn }}"><div class="preg-warn">⚠ IMPLICĂ IRADIERE</div></sc-if>
-            </div>
-          </sc-for>
-        </div>
-        <div data-printonly class="print-foot">IRIS — Indicații radioimagistice structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
-=======
             </div>
           </sc-for>
         </div>
         <div data-printonly class="print-foot">IRIS — Indicații RadioImagistice Structurate, adaptat după Ghidul de utilizare a investigațiilor radiologice și imagistice medicale (Ministerul Sănătății). Instrument de suport decizional — nu înlocuiește judecata clinică sau consultul de specialitate.</div>
->>>>>>> Stashed changes
       </div>
       </sc-if>
 
@@ -347,11 +293,7 @@
       <div data-noprint class="install-card">
         <div class="snack-icon">⎋</div>
         <div class="snack-body"><div class="snack-title-14">Adaugă IRIS pe ecranul principal</div><div class="snack-sub-muted">Apasă <b class="txt-strong">Partajează ⎋</b> apoi <b class="txt-strong">Adaugă la ecranul principal</b></div></div>
-<<<<<<< Updated upstream
-        <button onClick="{{ dismissInstall }}" class="snack-close">✕</button>
-=======
         <button onClick="{{ dismissInstall }}" aria-label="Închide" class="snack-close">✕</button>
->>>>>>> Stashed changes
       </div>
     </sc-if>
 
@@ -359,11 +301,7 @@
     <sc-if value="{{ legendOpen }}">
       <div data-noprint onClick="{{ closeLegend }}" class="overlay">
         <div onClick="{{ stop }}" class="modal">
-<<<<<<< Updated upstream
-          <div class="modal-head"><h3 class="modal-title">Legendă</h3><button onClick="{{ closeLegend }}" class="modal-close">✕</button></div>
-=======
           <div class="modal-head"><h3 class="modal-title">Legendă</h3><button onClick="{{ closeLegend }}" aria-label="Închide legenda" class="modal-close">✕</button></div>
->>>>>>> Stashed changes
           <div class="modal-body">
 
           <div class="legend-label ll-first">RECOMANDARE</div>
@@ -391,19 +329,12 @@
     <sc-if value="{{ aboutOpen }}">
       <div data-noprint onClick="{{ closeAbout }}" class="overlay">
         <div onClick="{{ stop }}" class="modal">
-<<<<<<< Updated upstream
-          <div class="modal-head"><h3 class="modal-title">Despre IRIS</h3><button onClick="{{ closeAbout }}" class="modal-close">✕</button></div>
-=======
           <div class="modal-head"><h3 class="modal-title">Despre IRIS</h3><button onClick="{{ closeAbout }}" aria-label="Închide" class="modal-close">✕</button></div>
->>>>>>> Stashed changes
           <div class="modal-body-2">
 
           <div class="legend-label al-first">DESPRE GHIDUL OFICIAL</div>
           <p class="about-p">IRIS transpune indicațiile din ghidul oficial de utilizare a investigațiilor radiologice și imagistice medicale într-un format digital ușor de utilizat. Ne ghidează două principii: alegerea investigației potrivite pentru fiecare situație clinică, la momentul potrivit, și preferința, pe cât posibil, a tehnicilor neiradiante.</p>
-<<<<<<< Updated upstream
-=======
           <p class="about-p">Scopul final: cea mai bună investigație pentru pacient, cu cea mai mică doză de radiații posibilă și fără a suprasolicita echipamentele și timpul echipei medicale.</p>
->>>>>>> Stashed changes
 
           <div class="legend-label al-8">CUI SE ADRESEAZĂ</div>
           <p class="about-p">Destinat profesioniștilor din sănătate ca instrument de suport decizional. Recomandările sunt orientative, nu reguli intangibile, și nu acoperă supraspecializările; ele trebuie corelate cu dotarea tehnică locală, experiența disponibilă și statusul pacientului. Decizia finală asupra examinării revine medicului radiolog / de medicină nucleară.</p>
@@ -418,11 +349,7 @@
           <div class="legend-label al-20">APLICAȚIE</div>
           <div class="about-rows">
             <div class="about-row"><span class="about-key">Mentenanță</span><span>Dr. Costin Stroie</span></div>
-<<<<<<< Updated upstream
-            <div class="about-row"><span class="about-key">Contact</span><a href="/cdn-cgi/l/email-protection#294a465a5d40475a5d5b46404c694c5b404d5c074c5c07465b4e" class="link-accent"><span class="__cf_email__" data-cfemail="ff9c908c8b96918c8b8d90969abf9a8d969b8ad19a8ad1908d98">[email&#160;protected]</span></a></div>
-=======
             <div class="about-row"><span class="about-key">Contact</span><a href="/cdn-cgi/l/email-protection#e9809b809aa98c9b808d9cc78c9cc7869b8e" class="link-accent"><span class="__cf_email__" data-cfemail="caa3b8a3b98aafb8a3aebfe4afbfe4a5b8ad">[email&#160;protected]</span></a></div>
->>>>>>> Stashed changes
             <div class="about-row"><span class="about-key">Licență</span><span>GPL-3.0</span></div>
           </div>
           <a href="{{ repoUrl }}" target="_blank" rel="noopener" class="link-card">
