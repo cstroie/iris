@@ -1,5 +1,5 @@
 /* IRIS PWA service worker */
-const CACHE='iris-v42';
+const CACHE='iris-v43';
 const ASSETS=['./','./index.html','./styles.css','./manifest.json','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./support.js','./data/iris-data.js'];
 self.addEventListener('install',e=>{ self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).catch(()=>{})); });
 self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });

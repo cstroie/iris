@@ -14,7 +14,9 @@
       "perimetru cranian",
       "macrocranie",
       "craniostenoza",
-      "hidrocefalie",
+      "hidrocefalie"
+    ],
+    "broaden": [
       "cap",
       "craniu",
       "sistem nervos central"
@@ -31,7 +33,9 @@
     "expand": [
       "accident vascular",
       "ischemie cerebrala",
-      "hemoragie cerebrala",
+      "hemoragie cerebrala"
+    ],
+    "broaden": [
       "neuro",
       "cerebral"
     ]
@@ -45,11 +49,13 @@
       "durere toracica"
     ],
     "expand": [
-      "durere toracica",
       "sindrom coronarian",
-      "cord",
       "infarct",
       "coronarografie"
+    ],
+    "broaden": [
+      "durere toracica",
+      "cord"
     ]
   },
   {
@@ -62,7 +68,9 @@
     ],
     "expand": [
       "fractura",
-      "traumatism",
+      "traumatism"
+    ],
+    "broaden": [
       "os",
       "aparat locomotor",
       "membru"
@@ -76,7 +84,9 @@
       "durere de cap"
     ],
     "expand": [
-      "cefalee",
+      "cefalee"
+    ],
+    "broaden": [
       "neuro",
       "cerebral",
       "cap"
@@ -93,9 +103,11 @@
     ],
     "expand": [
       "sarcina",
-      "obstetrica",
       "fetal",
-      "gravida",
+      "gravida"
+    ],
+    "broaden": [
+      "obstetrica",
       "uter"
     ]
   },
@@ -110,7 +122,9 @@
     "expand": [
       "litiaza",
       "colica renala",
-      "calcul",
+      "calcul"
+    ],
+    "broaden": [
       "aparat urinar",
       "rinichi",
       "uro"
@@ -124,9 +138,11 @@
     ],
     "expand": [
       "cancer bronho-pulmonar",
-      "pulmon",
-      "torace",
       "nodul pulmonar"
+    ],
+    "broaden": [
+      "pulmon",
+      "torace"
     ]
   },
   {
@@ -138,10 +154,12 @@
       "mammogram"
     ],
     "expand": [
-      "san",
       "mamografie",
       "cancer de san",
       "nodul mamar"
+    ],
+    "broaden": [
+      "san"
     ]
   },
   {
@@ -151,14 +169,19 @@
       "durere spate",
       "sciatica",
       "hernie de disc",
-      "slipped disc"
+      "slipped disc",
+      "durere de spate",
+      "dureri de spate",
+      "durere lombara"
     ],
     "expand": [
       "coloana lombara",
       "lombalgie",
       "hernie de disc",
-      "coloana vertebrala",
       "sciatica"
+    ],
+    "broaden": [
+      "coloana vertebrala"
     ]
   },
   {
@@ -179,7 +202,9 @@
       "durere fosa iliaca"
     ],
     "expand": [
-      "apendicita",
+      "apendicita"
+    ],
+    "broaden": [
       "abdomen",
       "durere abdominala"
     ]
@@ -192,10 +217,12 @@
       "nodul tiroidian"
     ],
     "expand": [
-      "tiroida",
       "cancer tiroidian",
-      "gat",
       "nodul tiroidian"
+    ],
+    "broaden": [
+      "tiroida",
+      "gat"
     ]
   },
   {
@@ -205,7 +232,9 @@
       "psa crescut"
     ],
     "expand": [
-      "cancer prostatic",
+      "cancer prostatic"
+    ],
+    "broaden": [
       "prostata",
       "aparat genital masculin"
     ]
@@ -217,10 +246,12 @@
       "displazie sold"
     ],
     "expand": [
-      "sold",
       "displazie",
-      "aparat locomotor",
       "sold dureros"
+    ],
+    "broaden": [
+      "sold",
+      "aparat locomotor"
     ]
   },
   {
@@ -231,7 +262,9 @@
     ],
     "expand": [
       "icter",
-      "colestaza",
+      "colestaza"
+    ],
+    "broaden": [
       "ficat",
       "aparat digestiv"
     ]
@@ -244,7 +277,9 @@
     ],
     "expand": [
       "convulsii",
-      "epilepsie",
+      "epilepsie"
+    ],
+    "broaden": [
       "neuro",
       "cerebral"
     ]
@@ -258,7 +293,9 @@
     ],
     "expand": [
       "traumatism",
-      "politraumatism",
+      "politraumatism"
+    ],
+    "broaden": [
       "urgenta"
     ]
   },
@@ -270,10 +307,12 @@
       "pneumonia"
     ],
     "expand": [
-      "pulmon",
-      "torace",
       "pneumonie",
       "radiografie toracica"
+    ],
+    "broaden": [
+      "pulmon",
+      "torace"
     ]
   },
   {
@@ -283,7 +322,9 @@
       "urina cu sange"
     ],
     "expand": [
-      "hematurie",
+      "hematurie"
+    ],
+    "broaden": [
       "aparat urinar",
       "vezical",
       "uro"
@@ -310,10 +351,12 @@
       "greu de respirat"
     ],
     "expand": [
+      "insuficienta cardiaca"
+    ],
+    "broaden": [
       "pulmon",
       "torace",
-      "cardiac",
-      "insuficienta cardiaca"
+      "cardiac"
     ]
   },
   {
@@ -322,7 +365,8 @@
       "burta doare",
       "durere la burtă"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "abdomen",
       "aparat digestiv",
       "urgenta"
@@ -360,8 +404,10 @@
       "scaun des"
     ],
     "expand": [
-      "aparat digestiv",
       "gastroenterita"
+    ],
+    "broaden": [
+      "aparat digestiv"
     ]
   },
   {
@@ -371,7 +417,8 @@
       "greu sa defecam",
       "nu pot merge la baie"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "colon",
       "intestin"
     ]
@@ -383,7 +430,8 @@
       "vreau sa vomit",
       "gata"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "aparat digestiv",
       "abdomen"
     ]
@@ -395,7 +443,9 @@
       "febra mare"
     ],
     "expand": [
-      "infectie",
+      "infectie"
+    ],
+    "broaden": [
       "urgenta",
       "sistem imunitar"
     ]
@@ -407,8 +457,10 @@
       "durere la urinare"
     ],
     "expand": [
-      "aparat urinar",
       "infectie urinara"
+    ],
+    "broaden": [
+      "aparat urinar"
     ]
   },
   {
@@ -417,7 +469,8 @@
       "hemoglobina scazuta",
       "sange prost"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "hematologie",
       "sange"
     ]
@@ -429,7 +482,8 @@
       "tensiune mare",
       "hipertensiune"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "aorta",
       "cardiac",
       "vascular"
@@ -442,7 +496,9 @@
       "zahar in sange"
     ],
     "expand": [
-      "diabet",
+      "diabet"
+    ],
+    "broaden": [
       "pancreas",
       "endocrinologie"
     ]
@@ -454,7 +510,8 @@
       "greu",
       "in plus"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "metabolic",
       "endocrinologie"
     ]
@@ -465,7 +522,8 @@
       "nu pot face copii",
       "nu se insarcina"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "obstetrica",
       "aparat genital"
     ]
@@ -476,7 +534,8 @@
       "disfunctie erectila",
       "nu reusesc"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "aparat genital masculin",
       "vascular"
     ]
@@ -487,7 +546,8 @@
       "lipide crescute",
       "grasimi in sange"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "vascular",
       "cardiac",
       "metabolic"
@@ -500,7 +560,8 @@
       "ochi rosu",
       "conjunctivita"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "oft",
       "ochi",
       "uro"
@@ -512,7 +573,8 @@
       "stenocardie",
       "angina pectorala"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "cardiac",
       "torace",
       "coronar"
@@ -528,9 +590,11 @@
       "traumatism cranio-cerebral"
     ],
     "expand": [
+      "traumatism"
+    ],
+    "broaden": [
       "cranio",
       "cerebral",
-      "traumatism",
       "encefalic"
     ]
   },
@@ -541,8 +605,10 @@
       "masa cerebrala"
     ],
     "expand": [
+      "tumora"
+    ],
+    "broaden": [
       "cerebral",
-      "tumora",
       "medular"
     ]
   },
@@ -554,9 +620,11 @@
       "tulburari de echilibru"
     ],
     "expand": [
-      "cerebral",
-      "temporal",
       "urechea"
+    ],
+    "broaden": [
+      "cerebral",
+      "temporal"
     ]
   },
   {
@@ -565,10 +633,17 @@
       "tep",
       "pulmonary embolism",
       "cheag la plaman",
-      "trombembolism pulmonar"
+      "trombembolism pulmonar",
+      "tromboembolism pulmonar",
+      "tromboembolism",
+      "tromboembolie pulmonara",
+      "cheag pe plaman"
     ],
     "expand": [
-      "embolie",
+      "embolie pulmonara",
+      "embolie"
+    ],
+    "broaden": [
       "pulmon",
       "torace"
     ]
@@ -581,9 +656,11 @@
       "anevrism aortic"
     ],
     "expand": [
-      "aorta",
       "disectie",
-      "anevrism",
+      "anevrism"
+    ],
+    "broaden": [
+      "aorta",
       "vascular"
     ]
   },
@@ -596,7 +673,9 @@
       "flebita"
     ],
     "expand": [
-      "tromboza",
+      "tromboza"
+    ],
+    "broaden": [
       "vascular",
       "picior"
     ]
@@ -607,7 +686,8 @@
       "durere de pancreas",
       "inflamatie pancreas"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "pancreas",
       "abdomen",
       "abdominala"
@@ -621,7 +701,9 @@
       "oprirea tranzitului"
     ],
     "expand": [
-      "ocluzie",
+      "ocluzie"
+    ],
+    "broaden": [
       "intestin",
       "colon",
       "abdomen"
@@ -639,7 +721,9 @@
     "expand": [
       "hemoragie",
       "melena",
-      "rectoragie",
+      "rectoragie"
+    ],
+    "broaden": [
       "colon",
       "stomac"
     ]
@@ -653,8 +737,10 @@
       "durere biliara"
     ],
     "expand": [
+      "colecistita"
+    ],
+    "broaden": [
       "colecist",
-      "colecistita",
       "ficat",
       "abdomen"
     ]
@@ -665,7 +751,8 @@
       "nu pot urina",
       "glob vezical"
     ],
-    "expand": [
+    "expand": [],
+    "broaden": [
       "vezical",
       "prostata",
       "urinar"
@@ -692,8 +779,10 @@
     "expand": [
       "genunchi",
       "entorsa",
-      "articulatii",
       "traumatism"
+    ],
+    "broaden": [
+      "articulatii"
     ]
   },
   {
@@ -704,8 +793,10 @@
     ],
     "expand": [
       "umar",
-      "articulatii",
       "traumatism"
+    ],
+    "broaden": [
+      "articulatii"
     ]
   },
   {
@@ -716,7 +807,9 @@
       "deviatie coloana"
     ],
     "expand": [
-      "scolioza",
+      "scolioza"
+    ],
+    "broaden": [
       "coloana",
       "vertebrala"
     ]
@@ -753,7 +846,9 @@
       "disfagie"
     ],
     "expand": [
-      "esofagian",
+      "esofagian"
+    ],
+    "broaden": [
       "esofag",
       "torace"
     ]
@@ -766,7 +861,9 @@
       "disfonie"
     ],
     "expand": [
-      "laringian",
+      "laringian"
+    ],
+    "broaden": [
       "laringe",
       "gat"
     ]
@@ -779,7 +876,9 @@
     ],
     "expand": [
       "ovarian",
-      "anexe",
+      "anexe"
+    ],
+    "broaden": [
       "pelvin",
       "uter"
     ]
@@ -792,7 +891,9 @@
       "screening san"
     ],
     "expand": [
-      "mamografie",
+      "mamografie"
+    ],
+    "broaden": [
       "mamar",
       "san"
     ]
@@ -816,7 +917,9 @@
     ],
     "expand": [
       "icter",
-      "colestaza",
+      "colestaza"
+    ],
+    "broaden": [
       "ficat",
       "colecist"
     ]

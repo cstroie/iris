@@ -594,30 +594,58 @@ class Component extends DCLogic {
   clearQuery=()=>{ this.setState({query:'',results:[],aiNote:''}); if(this.input) this.input.focus(); };
   lev(a,b){ const m=a.length,n=b.length; if(Math.abs(m-n)>1) return 2; const d=[]; for(let i=0;i<=m;i++)d[i]=[i]; for(let j=0;j<=n;j++)d[0][j]=j; for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
   expand(raw, tokens){
-    const set=new Set(tokens);
+    const strict=new Set(), broad=new Set(); let phrase=false;
     (this.D.synonyms||[]).forEach(g=>{
-      const hit=g.terms.some(t=>{ const nt=this.norm(t); return raw.includes(nt)||nt.includes(raw)||nt.split(/\s+/).some(w=>tokens.includes(w)); });
-      if(hit) g.expand.forEach(e=>this.norm(e).split(/\s+/).forEach(w=>{ if(w.length>1) set.add(w); }));
+      const hit=g.terms.some(t=>{ const nt=this.norm(t); if(!nt) return false; if(raw.includes(nt)||nt.includes(raw)) return true; return nt.indexOf(' ')<0 && tokens.includes(nt); });
+      if(!hit) return;
+      if(g.terms.some(t=>{ const nt=this.norm(t); return nt && (nt===raw || (nt.indexOf(' ')>=0 && (raw.includes(nt)||nt.includes(raw)))); })) phrase=true;
+      (g.expand||[]).forEach(e=>this.norm(e).split(/\s+/).forEach(w=>{ if(w.length>1 && !tokens.includes(w)) strict.add(w); }));
+      (g.broaden||[]).forEach(e=>this.norm(e).split(/\s+/).forEach(w=>{ if(w.length>1 && !tokens.includes(w)) broad.add(w); }));
     });
-    return [...set];
+    strict.forEach(w=>broad.delete(w));
+    return {strict:[...strict], broad:[...broad], phrase};
   }
   runSearch(q){
     const raw=this.norm(q); if(raw.length<2){ this.setState({results:[]}); return; }
     const tokens=raw.split(/\s+/).filter(t=>t.length>1);
-    const terms=this.expand(raw,tokens);
+    const ex=this.expand(raw,tokens);
     const orig=new Set(tokens);
-    const out=[];
-    for(const it of this.index){
-      let sc=0;
-      for(const t of terms){
-        const w=orig.has(t)?1:0.6;
-        if(it.name.includes(t)) sc+=4*w;
-        else if(it.body.includes(t)) sc+=1.4*w;
-        else if(t.length>=4 && it.nameWords.some(x=>Math.abs(x.length-t.length)<=1 && this.lev(x,t)<=1)) sc+=2.4*w;
+    const qual=new Set([...tokens, ...ex.strict]);   // terms allowed to create a result
+    const all=[...qual, ...ex.broad];
+    const tokenHit=(it,t)=> it.name.includes(t) || it.body.includes(t) || (t.length>=4 && it.nameWords.some(x=>Math.abs(x.length-t.length)<=1 && this.lev(x,t)<=1));
+    // AND gate: for a multi-word query, every concrete original token (>=3 chars, present in the data) must match the item
+    const gate=tokens.filter(t=>t.length>=3 && this.index.some(it=>it.name.includes(t)||it.body.includes(t)));
+    const useGate=gate.length>=2;
+    // when the whole query is a known synonym phrase, its specific expansions may stand in for a missing token
+    const strictSat=ex.phrase ? ex.strict.filter(x=>x.length>=4 && !gate.includes(x)) : [];
+    const satisfies=(it,t)=> tokenHit(it,t) || strictSat.some(x=>it.name.includes(x)||it.body.includes(x));
+    const scan=(gateArr,broadQualifies)=>{
+      const out=[];
+      for(const it of this.index){
+        if(gateArr.length && !gateArr.every(t=>satisfies(it,t))) continue;
+        let sc=0, ok=false;
+        for(const t of all){
+          const isBroad=!qual.has(t);
+          const w=orig.has(t)?1:(isBroad?0.3:0.6);
+          let hit=0;
+          if(it.name.includes(t)) hit=4*w;
+          else if(it.body.includes(t)) hit=1.4*w;
+          else if(t.length>=4 && it.nameWords.some(x=>Math.abs(x.length-t.length)<=1 && this.lev(x,t)<=1)) hit=2.4*w;
+          if(hit){ sc+=hit; if(!isBroad || broadQualifies) ok=true; }
+        }
+        if(sc>0 && ok) out.push({it,sc});
       }
-      if(sc>0) out.push({it,sc});
-    }
+      return out;
+    };
+    const g=useGate?gate:[];
+    let out=scan(g,false);
+    if(out.length<5) out=scan(g,true);          // fall back to broad category terms when the strict search is thin
+    if(!out.length && g.length) out=scan([],true); // last resort: drop the AND gate
     out.sort((a,b)=>b.sc-a.sc);
+    if(out.length){
+      const top=out[0].sc, cut=Math.max(Math.min(2, top), top*0.35);
+      out=out.filter(o=>o.sc>=cut);
+    }
     this.setState({results: out.slice(0,60).map(o=>o.it.sit)});
   }
   onAI=async ()=>{
